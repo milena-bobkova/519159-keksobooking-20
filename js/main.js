@@ -28,12 +28,12 @@ var LOCATION_X_MAX = 1200;
 var LOCATION_Y_MIN = 130;
 var LOCATION_Y_MAX = 630;
 
-//Генерация случайных чисел
+// Генерация случайных чисел
 var getRandomNumber = function (min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
-}
+};
 
-//Генерация случайного элемента массива
+// Генерация случайного элемента массива
 var getRandomElement = function (elements) {
   var random = elements[Math.floor(Math.random() * elements.length)];
   return elements[random];
@@ -43,7 +43,7 @@ var map = document.querySelector('.map');
 map.classList.remove('map--faded');
 var mapPins = map.querySelector('.map__pins');
 
-//Создание объявления
+// Создание объявления
 var createOffer = function (number) {
   var locationX = getRandomNumber(LOCATION_X_MIN + PIN_WIDTH / 2, LOCATION_X_MAX - PIN_WIDTH / 2);
   var locationY = getRandomNumber(LOCATION_Y_MIN, LOCATION_Y_MAX - OFFERS_HEIGHT);
@@ -72,7 +72,7 @@ var createOffer = function (number) {
   };
 };
 
-//Создание массива объявлений
+// Создание массива объявлений
 var createOffers = function () {
   var offers = [];
 
@@ -82,7 +82,7 @@ var createOffers = function () {
   return offers;
 };
 
-//создание метки
+// Создание метки
 var mapPinTemplate = document.querySelector('#pin').content.querySelector('.map__pin');
 
 var createPin = function (pin) {
@@ -97,13 +97,13 @@ var createPin = function (pin) {
   return pinElement;
 };
 
-//отрисовка меток объявлений
-var drawPins = function (offers) {
+// Отрисовка меток объявлений
+var drawPins = function () {
   var fragment = document.createDocumentFragment();
   var offers = createOffers();
   for (var i = 0; i < offers.length; i++) {
     fragment.appendChild(createPin(offers[i]));
-  };
+  }
   return fragment;
 };
 
