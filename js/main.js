@@ -1,39 +1,72 @@
 'use strict';
 
 var OFFER_NUMBER = 8;
-
-var PIN_WIDTH = 40;
-var PIN_HEIGHT = 70;
 var OFFERS_HEIGHT = 46;
 
-var AVATAR = 'img/avatars/user0';
+var Pin = {
+  WIDTH: 40,
+  HEIGHT: 70
+}
 
-var OFFER_TITLES = ['Заголовок объявления'];
-var OFFER_PRICE_MIN = 1;
-var OFFER_PRICE_MAX = 50000;
-var OFFER_TYPES = ['place', 'flat', 'house', 'bungalo'];
-var OFFER_ROOMS = [1, 2, 3];
-var OFFER_GUESTS = [1, 2, 3];
-var OFFER_CHECKIN = ['12:00', '13:00', '14:00'];
-var OFFER_CHECKOUT = ['12:00', '13:00', '14:00'];
-var OFFER_FEATURES = ['wifi', 'dishwasher', 'parking', 'washer', 'elevator', 'conditioner'];
-var OFFER_PHOTOS = [
-  'http://o0.github.io/assets/images/tokyo/hotel1.jpg',
-  'http://o0.github.io/assets/images/tokyo/hotel2.jpg',
-  'http://o0.github.io/assets/images/tokyo/hotel3.jpg'
-];
+var Avatar = {
+  NAME: 'img/avatars/user0',
+  EXTENSION: '.png'
+}
 
-var LOCATION_X_MIN = 0;
-var LOCATION_X_MAX = 1200;
-var LOCATION_Y_MIN = 130;
-var LOCATION_Y_MAX = 630;
+var Offer = {
+  TITLES: ['Заголовок объявления'],
+  PRICE_MIN: 1,
+  PRICE_MAX: 50000,
+  TYPES: [
+    'place',
+    'flat',
+    'house',
+    'bungalo'
+  ],
+  ROOMS: [1, 2, 3],
+  GUESTS: [1, 2, 3, 4, 5],
+  CHECKIN_OUT: [
+    '12:00',
+    '13:00',
+    '14:00'],
+  FEATURES: [
+    'wifi',
+    'dishwasher',
+    'parking',
+    'washer',
+    'elevator',
+    'conditioner'
+  ],
+  PHOTOS: [
+    'http://o0.github.io/assets/images/tokyo/hotel1.jpg',
+    'http://o0.github.io/assets/images/tokyo/hotel2.jpg',
+    'http://o0.github.io/assets/images/tokyo/hotel3.jpg'
+  ]
+}
 
-// Генерация случайных чисел
+var Location = {
+  X_MIN: 0,
+  X_MAX: 1200,
+  Y_MIN: 130,
+  Y_MAX: 630
+}
+
+/**
+ * Генерация случайного числа из диапазона
+ * @param {number} min - минимальное значение
+ * @param {number} max - максимальное значение
+ * @return {number} - случайное значение
+ */
 var getRandomNumber = function (min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 };
 
-// Генерация случайного элемента массива
+/**
+ * Генерация случайного элемента массива
+ * @param {*} elements  - исходный массив
+ * @param {number} random - сгенерированный индекс
+ * @return {*} - случайный элемент массива
+ */
 var getRandomElement = function (elements) {
   var random = elements[Math.floor(Math.random() * elements.length)];
   return elements[random];
@@ -45,25 +78,24 @@ var mapPins = map.querySelector('.map__pins');
 
 // Создание объявления
 var createOffer = function (number) {
-  var locationX = getRandomNumber(LOCATION_X_MIN + PIN_WIDTH / 2, LOCATION_X_MAX - PIN_WIDTH / 2);
-  var locationY = getRandomNumber(LOCATION_Y_MIN, LOCATION_Y_MAX - OFFERS_HEIGHT);
+  var locationX = getRandomNumber(Location.X_MIN + Pin.WIDTH / 2, Location.X_MAX - Pin.WIDTH / 2);
+  var locationY = getRandomNumber(Location.Y_MIN, Location.Y_MAX - OFFERS_HEIGHT);
 
   return {
     author: {
-      avatar: AVATAR + number + '.png'
+      avatar: Avatar.NAME + number + Avatar.EXTENSION
     },
     offer: {
-      title: getRandomElement(OFFER_TITLES),
-      addres: locationX + ', ' + locationY,
-      price: getRandomNumber(OFFER_PRICE_MIN, OFFER_PRICE_MAX),
-      type: getRandomElement(OFFER_TYPES),
-      rooms: getRandomElement(OFFER_ROOMS),
-      guests: getRandomElement(OFFER_GUESTS),
-      checkin: getRandomElement(OFFER_CHECKIN),
-      checkout: getRandomElement(OFFER_CHECKOUT),
-      features: getRandomElement(OFFER_FEATURES),
-      description: '',
-      photos: getRandomElement(OFFER_PHOTOS)
+      title: getRandomElement(Offer.TITLES),
+      address: locationX + ', ' + locationY,
+      price: getRandomNumber(Offer.PRICE_MIN, Offer.PRICE_MAX),
+      type: getRandomElement(Offer.TYPES),
+      rooms: getRandomElement(Offer.ROOMS),
+      guests: getRandomElement(Offer.GUESTS),
+      checkin: getRandomElement(Offer.CHECKIN_OUT),
+      checkout: getRandomElement(Offer.CHECKIN_OUT),
+      features: getRandomElement(Offer.FEATURES),
+      photos: Offer.PHOTOS.slice(0, getRandomNumber(0, Offer.PHOTOS.length))
     },
     location: {
       x: locationX,
@@ -76,8 +108,8 @@ var createOffer = function (number) {
 var createOffers = function () {
   var offers = [];
 
-  for (var i = 1; i <= OFFER_NUMBER; i++) {
-    offers.push(createOffer(i));
+  for (var i = 0; i < OFFER_NUMBER; i++) {
+    offers.push(createOffer(i + 1));
   }
   return offers;
 };
@@ -85,28 +117,28 @@ var createOffers = function () {
 // Создание метки
 var mapPinTemplate = document.querySelector('#pin').content.querySelector('.map__pin');
 
-var createPin = function (pin) {
+var createNodePin = function (pin) {
   var pinElement = mapPinTemplate.cloneNode(true);
+  var pinElementImg = pinElement.querySelector('img');
 
-  pinElement.querySelector('img').src = pin.author.avatar;
-  pinElement.querySelector('img').alt = pin.offer.title;
+  pinElementImg.src = pin.author.avatar;
+  pinElementImg.alt = pin.offer.title;
 
-  pinElement.style.left = pin.location.x - PIN_WIDTH + 'px';
-  pinElement.style.top = pin.location.y + PIN_HEIGHT + 'px';
+  pinElement.style.left = pin.location.x - Pin.WIDTH / 2 + 'px';
+  pinElement.style.top = pin.location.y + Pin.HEIGHT + 'px';
 
   return pinElement;
 };
 
 // Отрисовка меток объявлений
+var offers = createOffers();
 var drawPins = function () {
   var fragment = document.createDocumentFragment();
-  var offers = createOffers();
-  for (var i = 0; i < offers.length; i++) {
-    fragment.appendChild(createPin(offers[i]));
-  }
+
+  offers.forEach(function (offers) {
+    fragment.appendChild(createNodePin(offers));
+  });
   return fragment;
 };
 
-var fragment = drawPins();
-
-mapPins.appendChild(fragment);
+mapPins.appendChild(drawPins());
