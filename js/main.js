@@ -6,12 +6,12 @@ var OFFERS_HEIGHT = 46;
 var Pin = {
   WIDTH: 40,
   HEIGHT: 70
-}
+};
 
 var Avatar = {
   NAME: 'img/avatars/user0',
   EXTENSION: '.png'
-}
+};
 
 var TITLES = [
   'Заголовок объявления',
@@ -21,7 +21,7 @@ var TITLES = [
 var Price = {
   MIN: 1,
   MAX: 50000
-}
+};
 var TYPES = {
   place: 'дворец',
   flat: 'квартира',
@@ -56,20 +56,20 @@ var PHOTOS = [
   'http://o0.github.io/assets/images/tokyo/hotel1.jpg',
   'http://o0.github.io/assets/images/tokyo/hotel2.jpg',
   'http://o0.github.io/assets/images/tokyo/hotel3.jpg'
-]
+];
 
-var Location = {
+var locationPin = {
   X_MIN: 0,
   X_MAX: 1200,
   Y_MIN: 130,
   Y_MAX: 630
-}
+};
 
 var DESCRIPTION = [
   'Великолепная квартира-студия в центре Токио.',
   'Подходит как туристам, так и бизнесменам.',
   'Квартира полностью укомплектована и недавно отремонтирована.'
-]
+];
 
 /**
  * Генерация случайного числа из диапазона
@@ -120,19 +120,18 @@ var getRandomProperty = function (obj) {
   return randomValue;
 };
 
-
 var map = document.querySelector('.map');
 map.classList.remove('map--faded');
 var mapPins = map.querySelector('.map__pins');
 
 // Создание объявления
 var createOffer = function (index) {
-  var locationX = getRandomNumber(Location.X_MIN + Pin.WIDTH / 2, Location.X_MAX - Pin.WIDTH / 2);
-  var locationY = getRandomNumber(Location.Y_MIN, Location.Y_MAX - OFFERS_HEIGHT);
+  var locationX = getRandomNumber(locationPin.X_MIN + Pin.WIDTH / 2, locationPin.X_MAX - Pin.WIDTH / 2);
+  var locationY = getRandomNumber(locationPin.Y_MIN, locationPin.Y_MAX - OFFERS_HEIGHT);
 
   return {
     author: {
-      avatar: Avatar.NAME + index + Avatar.EXTENSION
+      avatar: Avatar.NAME + (index + 1) + Avatar.EXTENSION
     },
     offer: {
       title: getRandomElement(TITLES, 0, TITLES.length - 1),
@@ -155,11 +154,11 @@ var createOffer = function (index) {
 };
 
 // Создание массива объявлений
-var createOffers = function () {
+var createOffers = function (count) {
   var offers = [];
 
-  for (var i = 0; i < OFFER_NUMBER; i++) {
-    offers.push(createOffer(i + 1));
+  for (var i = 0; i < count; i++) {
+    offers.push(createOffer(i));
   }
   return offers;
 };
@@ -180,13 +179,15 @@ var createNodePin = function (pin) {
   return pinElement;
 };
 
+// Генерация объявлений
+var offers = createOffers(OFFER_NUMBER);
+
 // Отрисовка меток объявлений
-var offers = createOffers();
 var drawPins = function () {
   var fragment = document.createDocumentFragment();
 
-  offers.forEach(function (offers) {
-    fragment.appendChild(createNodePin(offers));
+  offers.forEach(function (offer) {
+    fragment.appendChild(createNodePin(offer));
   });
   return fragment;
 };
