@@ -3,47 +3,11 @@
 var OFFER_NUMBER = 8;
 var OFFERS_HEIGHT = 46;
 
-var Pin = {
-  WIDTH: 40,
-  HEIGHT: 70
-};
-
-var pinMainSize = {
-  WIDTH: 65,
-  HEIGHT: 65,
-  POINTER: 22
-};
-
-var Avatar = {
-  NAME: 'img/avatars/user0',
-  EXTENSION: '.png'
-};
-
 var TITLES = [
   'Заголовок объявления',
   'Объявление'
 ];
 
-var Price = {
-  MIN: 1,
-  MAX: 50000
-};
-
-var TYPES = {
-  place: 'дворец',
-  flat: 'квартира',
-  house: 'дом',
-  bungalo: 'бунгало'
-};
-
-var Rooms = {
-  MIN: 1,
-  MAX: 4
-};
-var Guests = {
-  MIN: 1,
-  MAX: 3
-};
 var CHECKIN_OUT = [
   '12:00',
   '13:00',
@@ -65,13 +29,6 @@ var PHOTOS = [
   'http://o0.github.io/assets/images/tokyo/hotel3.jpg'
 ];
 
-var locationPin = {
-  X_MIN: 0,
-  X_MAX: 1200,
-  Y_MIN: 130,
-  Y_MAX: 630
-};
-
 var DESCRIPTION = [
   'Великолепная квартира-студия в центре Токио.',
   'Подходит как туристам, так и бизнесменам.',
@@ -79,6 +36,46 @@ var DESCRIPTION = [
 ];
 
 var FORM_ACTION = 'https://javascript.pages.academy/keksobooking';
+
+var PIN_MAIN_POINTER = 22;
+
+var Pin = {
+  WIDTH: 40,
+  HEIGHT: 70
+};
+
+var Avatar = {
+  NAME: 'img/avatars/user0',
+  EXTENSION: '.png'
+};
+
+var Price = {
+  MIN: 1,
+  MAX: 50000
+};
+
+var Types = {
+  PALACE: 'Дворец',
+  FLAT: 'Квартира',
+  HOUSE: 'Дом',
+  BUNGALO: 'Бунгало'
+};
+
+var Rooms = {
+  MIN: 1,
+  MAX: 4
+};
+var Guests = {
+  MIN: 1,
+  MAX: 3
+};
+
+var locationPin = {
+  X_MIN: 0,
+  X_MAX: 1200,
+  Y_MIN: 130,
+  Y_MAX: 630
+};
 
 /**
  * Генерация случайного числа из диапазона
@@ -145,7 +142,7 @@ var createOffer = function (index) {
       title: getRandomElement(TITLES, 0, TITLES.length - 1),
       address: locationX + ', ' + locationY,
       price: getRandomNumber(Price.MIN, Price.MAX),
-      type: getRandomProperty(TYPES),
+      type: getRandomProperty(Types),
       rooms: getRandomNumber(Rooms.MIN, Rooms.MAX),
       guests: getRandomNumber(Guests.MIN, Guests.MAX),
       checkin: getRandomElement(CHECKIN_OUT, 0, CHECKIN_OUT.length - 1),
@@ -189,17 +186,20 @@ var createNodePin = function (pin) {
 
 // Генерация объявлений
 var offers = createOffers(OFFER_NUMBER);
+var fragment = document.createDocumentFragment();
 
-// Отрисовка меток объявлений
-var drawPins = function () {
-  var fragment = document.createDocumentFragment();
-
+/**
+ * Отрисовка меток объявлений
+ * @param {object} offer - объявление
+ * @param {array} offers - массив объявлений
+ * @return {object} - сгенерированные метки
+ */
+var drawPins = function (offers) {
   offers.forEach(function (offer) {
     fragment.appendChild(createNodePin(offer));
   });
   return fragment;
 };
-
 
 // Данные для карточки обявления
 /**
@@ -264,40 +264,59 @@ var adFormSubmit = adForm.querySelector('.ad-form__submit');
 
 adForm.action = FORM_ACTION;
 
-pinMain.addEventListener('mousedown', function (evt) {
+var pinMainMouseDownHandler = function (evt) {
   if (evt.button === 0) {
-    mapActive();
+    pageActive();
   }
-});
-
-pinMain.addEventListener('keydown', function (evt) {
-  if (evt.key === 'Enter') {
-    mapActive();
-  }
-});
-
-var setPinMain = function (isMapActive) {
-  var positionX = Math.round(pinMainSize.WIDTH / 2);
-  var positionY = Math.round(pinMainSize.HEIGHT / 2);
-
-  if (isMapActive) {
-    positionY = Math.round(pinMainSize.HEIGHT + pinMainSize.POINTER);
-  }
-  return positionX + ', ' + positionY;
 };
 
-/** Изменение состояния fieldset
- * @param {array} array - массив fieldset-ов
- * @param {boolean} result - состояние элемента массива
- * @param {*} item - элемент массива
+var pinMainKeyDownHandler = function (evt) {
+  if (evt.key === 'Enter') {
+    pageActive();
+  }
+};
+
+pinMain.addEventListener('mousedown', pinMainMouseDownHandler);
+pinMain.addEventListener('keydown', pinMainKeyDownHandler);
+
+/**
+ * Получает координаты элемента относительно документа
+ * @param {object} elem  - данный элемент
  */
-var changeFieldset = function (array, result) {
-  array.forEach(function (item) {
-    item.disabled = result;
+function getAddressCoords(elem) {
+  let box = elem.getBoundingClientRect();
+
+  return {
+    top: box.top + pageYOffset,
+    left: box.left + pageXOffset
+  };
+};
+
+var addressCoords = getAddressCoords(pinMain);
+
+/**
+ * Записывает полусенные координаты в поле ввода адреса
+ */
+var setAddressCoords = function (isMapActive) {
+  var positionX = Math.round(addressCoords.left + pinMain.offsetWidth / 2);
+  var positionY = Math.round(addressCoords.top + ((isMapActive) ? (pinMain.offsetHeight + PIN_MAIN_POINTER) : (pinMain.offsetHeight / 2)));
+  adFormAddress.value = positionX + ', ' + positionY;
+};
+
+adFormAddress.setAttribute('readonly', 'readonly');
+
+/** Изменение состояния fieldset
+ * @param {array} fieldsets - массив fieldset-ов
+ * @param {boolean} isInabled - состояние элемента массива
+ * @param {*} fieldset - элемент массива
+ */
+var changeFieldset = function (fieldsets, isInabled) {
+  fieldsets.forEach(function (fieldset) {
+    fieldset.disabled = isInabled;
   });
 };
 
-var checkRoomsHandler = function () {
+var checkRooms = function () {
   switch (true) {
     case (adFormRooms.value === '100' && adFormCapacity.value !== '0'):
       adFormCapacity.setCustomValidity('Не для гостей');
@@ -313,31 +332,25 @@ var checkRoomsHandler = function () {
   }
 };
 
-var onSubmitClick = function () {
-  checkRoomsHandler();
+var onSubmitFormClick = function () {
+  checkRooms();
 };
 
-var addFormValidity = function () {
-  adFormSubmit.addEventListener('click', onSubmitClick);
-};
-
-var removeFormValidity = function () {
-  adFormSubmit.removeEventListener('click', onSubmitClick);
-};
-
-var mapActive = function () {
+var pageActive = function () {
   map.classList.remove('map--faded');
   adForm.classList.remove('ad-form--disabled');
-  mapPins.appendChild(drawPins());
+  mapPins.appendChild(drawPins(offers));
   changeFieldset(adFormFieldsets, false);
-  adFormAddress.value = setPinMain(true);
-  addFormValidity();
+  setAddressCoords(true);
+  adFormSubmit.addEventListener('click', onSubmitFormClick);
 };
 
-var mapInactive = function () {
+var pageInactive = function () {
+  map.classList.add('map--faded');
+  adForm.classList.add('ad-form--disabled');
   changeFieldset(adFormFieldsets, true);
-  adFormAddress.value = setPinMain(false);
-  removeFormValidity();
+  setAddressCoords(false);
+  adFormSubmit.removeEventListener('click', onSubmitFormClick);
 };
 
-mapInactive();
+pageInactive();
