@@ -208,11 +208,9 @@ var fragment = document.createDocumentFragment();
 
 /**
  * Отрисовка меток объявлений и карточки объявления при клике на пин
- * @param {object} offer - объявление
- * @param {array} offers - массив объявлений
  * @return {object} - сгенерированные метки
  */
-var drawPins = function (offers) {
+var drawPins = function () {
   offers.forEach(function (offer) {
     var pinElement = createNodePin(offer);
     var mapFilterContainer = document.querySelector('.map__filters-container');
@@ -262,7 +260,8 @@ var getCardPictures = function (cardElement, cardData) {
 
 /**
  * Отображение карточки объявления
- * @param {*} cardData - сгенерированные данные
+ * @param {object} cardData - сгенерированные данные
+ * @return {object} - сгенерированная карточка
  */
 var createNodeCard = function (cardData) {
   var mapCardTemplate = document.querySelector('#card').content.querySelector('.map__card');
@@ -315,7 +314,6 @@ var popupKeydownEscCloseHandler = function (evt) {
 // Активное и неактивное состояние страницы
 var pinMain = mapPins.querySelector('.map__pin--main');
 var adForm = document.querySelector('.ad-form');
-var adFormSubmit = adForm.querySelector('.ad-form__submit');
 var adFormFieldsets = adForm.querySelectorAll('fieldset');
 var adFormAddress = adForm.querySelector('input[name="address"]');
 var adFormRooms = adForm.querySelector('select[name="rooms"]');
@@ -357,15 +355,16 @@ pinMain.addEventListener('keydown', pinMainKeyDownHandler);
 /**
  * Получает координаты элемента относительно документа
  * @param {object} elem  - данный элемент
+ * @return {object} - координаты элемента
  */
 function getAddressCoords(elem) {
-  let box = elem.getBoundingClientRect();
+  var box = elem.getBoundingClientRect();
 
   return {
     top: box.top + pageYOffset,
     left: box.left + pageXOffset
   };
-};
+}
 
 /**
  * Записывает полученные координаты в поле ввода адреса
