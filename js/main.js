@@ -181,46 +181,41 @@ var createOffers = function (count) {
   return offers;
 };
 
+var offersData = createOffers(OFFER_NUMBER);
+
 /**
  * Создает метку объявления
- * @param {object} pin - данные для метки объявления
+ * @param {object} offer - данные для карточки объявления
  * @return {object} - созданный DOM-элемент
  */
 var mapPinTemplate = document.querySelector('#pin').content.querySelector('.map__pin');
-var createNodePin = function (pin) {
+var createNodePin = function (offer) {
   var pinElement = mapPinTemplate.cloneNode(true);
   var pinElementImg = pinElement.querySelector('img');
 
-  pinElementImg.src = pin.author.avatar;
-  pinElementImg.alt = pin.offer.title;
+  pinElementImg.src = offer.author.avatar;
+  pinElementImg.alt = offer.offer.title;
 
-  pinElement.style.left = pin.location.x - Pin.WIDTH / 2 + 'px';
-  pinElement.style.top = pin.location.y + Pin.HEIGHT + 'px';
+  pinElement.style.left = offer.location.x - Pin.WIDTH / 2 + 'px';
+  pinElement.style.top = offer.location.y + Pin.HEIGHT + 'px';
 
   return pinElement;
 };
 
 /**
- * Генерация объявлений
- */
-var offers = createOffers(OFFER_NUMBER);
-var fragment = document.createDocumentFragment();
-
-/**
  * Отрисовка меток объявлений и карточки объявления при клике на пин
+ * @param {object} offers - объявления
  * @return {object} - сгенерированные метки
  */
-var drawPins = function () {
+var drawPins = function (offers) {
+  var fragment = document.createDocumentFragment();
   offers.forEach(function (offer) {
-    var pinElement = createNodePin(offer);
-    var mapFilterContainer = document.querySelector('.map__filters-container');
-    pinElement.addEventListener('click', function (evt) {
+    var pin = createNodePin(offer);
+    pin.addEventListener('click', function (evt) {
       evt.preventDefault();
-      map.insertBefore(createNodeCard(offer), mapFilterContainer);
-      // Почему-то при добавлении этого обработчика пропадает фокус с клавиатуры на всех интерактивных элементах... Но карточка при этом при нажатии на Esc закрывается
-      document.addEventListener('keydown', popupKeydownEscCloseHandler);
+      mapPins.appendChild(createNodeCard(offer));
     });
-    fragment.appendChild(pinElement);
+    fragment.appendChild(pin);
   });
   return fragment;
 };
@@ -278,6 +273,7 @@ var createNodeCard = function (cardData) {
   cardElement.querySelector('.popup__description').textContent = cardData.offer.description;
   cardElement.querySelector('.popup__avatar').src = cardData.author.avatar;
   cardCloseButon.addEventListener('click', popupMouseDownCloseHandler);
+  document.addEventListener('keydown', popupKeydownEscCloseHandler);
   return cardElement;
 };
 
@@ -305,7 +301,6 @@ var popupMouseDownCloseHandler = function (evt) {
  * @param {*} evt - объект события
  */
 var popupKeydownEscCloseHandler = function (evt) {
-  evt.preventDefault();
   if (evt.key === 'Escape') {
     closeCard();
   }
@@ -380,12 +375,12 @@ adFormAddress.setAttribute('readonly', 'readonly');
 
 /** Изменение состояния fieldset
  * @param {array} fieldsets - массив fieldset-ов
- * @param {boolean} isInabled - состояние элемента массива
+ * @param {boolean} isEnabled - состояние элемента массива
  * @param {*} fieldset - элемент массива
  */
-var changeFieldset = function (fieldsets, isInabled) {
+var changeFieldset = function (fieldsets, isEnabled) {
   fieldsets.forEach(function (fieldset) {
-    fieldset.disabled = isInabled;
+    fieldset.disabled = isEnabled;
   });
 };
 
@@ -452,7 +447,7 @@ var minPriceHandler = function () {
 var pageActive = function () {
   map.classList.remove('map--faded');
   adForm.classList.remove('ad-form--disabled');
-  mapPins.appendChild(drawPins(offers));
+  mapPins.appendChild(drawPins(offersData));
   changeFieldset(adFormFieldsets, false);
   setAddressCoords(true);
   adFormRooms.addEventListener('input', checkRoomsHandler);
@@ -461,6 +456,8 @@ var pageActive = function () {
   adFormTimeOut.addEventListener('input', checkTimeOutHandler);
   adFormTitle.addEventListener('input', checkTitlesHandler);
   adFormType.addEventListener('change', minPriceHandler);
+  pinMain.removeEventListener('mousedown', pinMainMouseDownHandler);
+  pinMain.removeEventListener('keydown', pinMainKeyDownHandler);
 };
 
 /**
