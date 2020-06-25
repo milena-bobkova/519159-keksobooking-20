@@ -60,5 +60,5 @@
 
   window.card = {
     createNodeCard: createNodeCard
-  }
+  };
 })();

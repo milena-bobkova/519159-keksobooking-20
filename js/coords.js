@@ -1,8 +1,6 @@
 'use strict';
 
 (function () {
-  var PIN_MAIN_POINTER = 22;
-
   var mapPins = document.querySelector('.map__pins');
   var pinMain = mapPins.querySelector('.map__pin--main');
 
@@ -48,8 +46,9 @@
       top: box.top + pageYOffset,
       left: box.left + pageXOffset
     };
-  };
+  }
+
   window.coords = {
     getAddressCoords: getAddressCoords
-  }
+  };
 })();

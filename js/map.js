@@ -55,5 +55,5 @@
     drawPins: drawPins,
     popupMouseDownCloseHandler: popupMouseDownCloseHandler,
     popupKeydownEscCloseHandler: popupKeydownEscCloseHandler
-  }
+  };
 })();

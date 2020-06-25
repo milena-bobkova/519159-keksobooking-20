@@ -139,5 +139,5 @@
   window.form = {
     pageActive: pageActive,
     pageInactive: pageInactive
-  }
+  };
 })();

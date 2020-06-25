@@ -28,5 +28,5 @@
 
   window.pin = {
     createNodePin: createNodePin
-  }
+  };
 })();
