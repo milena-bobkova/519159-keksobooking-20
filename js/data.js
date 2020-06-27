@@ -1,66 +1,13 @@
 'use strict';
 
 (function () {
+
   var OFFER_NUMBER = 8;
   var OFFERS_HEIGHT = 46;
-
-  var TITLES = [
-    'Заголовок объявления',
-    'Объявление'
-  ];
-
-  var CHECKIN_OUT = [
-    '12:00',
-    '13:00',
-    '14:00'
-  ];
-
-  var FEATURES = [
-    'wifi',
-    'dishwasher',
-    'parking',
-    'washer',
-    'elevator',
-    'conditioner'
-  ];
-
-  var PHOTOS = [
-    'http://o0.github.io/assets/images/tokyo/hotel1.jpg',
-    'http://o0.github.io/assets/images/tokyo/hotel2.jpg',
-    'http://o0.github.io/assets/images/tokyo/hotel3.jpg'
-  ];
-
-  var DESCRIPTION = [
-    'Великолепная квартира-студия в центре Токио.',
-    'Подходит как туристам, так и бизнесменам.',
-    'Квартира полностью укомплектована и недавно отремонтирована.'
-  ];
-
 
   var Avatar = {
     NAME: 'img/avatars/user0',
     EXTENSION: '.png'
-  };
-
-  var Price = {
-    MIN: 1,
-    MAX: 50000
-  };
-
-  var Types = {
-    PALACE: 'Дворец',
-    FLAT: 'Квартира',
-    HOUSE: 'Дом',
-    BUNGALO: 'Бунгало'
-  };
-
-  var Rooms = {
-    MIN: 1,
-    MAX: 4
-  };
-  var Guests = {
-    MIN: 1,
-    MAX: 3
   };
 
   var locationPin = {
@@ -69,7 +16,7 @@
     Y_MAX: 630
   };
 
-  var locationXMax = document.querySelector('.map__overlay').offsetWidth;
+  var locationXMax = document.querySelector('.map').offsetWidth;
 
   /**
    * Генерация случайного числа из диапазона
@@ -132,17 +79,17 @@
         avatar: Avatar.NAME + (index + 1) + Avatar.EXTENSION
       },
       offer: {
-        title: getRandomElement(TITLES, 0, TITLES.length - 1),
+        title: getRandomElement(window.mock.titles, 0, window.mock.titles.length - 1),
         address: locationX + ', ' + locationY,
-        price: getRandomNumber(Price.MIN, Price.MAX),
-        type: getRandomProperty(Types),
-        rooms: getRandomNumber(Rooms.MIN, Rooms.MAX),
-        guests: getRandomNumber(Guests.MIN, Guests.MAX),
-        checkin: getRandomElement(CHECKIN_OUT, 0, CHECKIN_OUT.length - 1),
-        checkout: getRandomElement(CHECKIN_OUT, 0, CHECKIN_OUT.length - 1),
-        features: getRandomArray(FEATURES, 0, FEATURES.length - 1),
-        description: getRandomElement(DESCRIPTION, 0, DESCRIPTION.length - 1),
-        photos: getRandomArray(PHOTOS, 0, PHOTOS.length - 1)
+        price: getRandomNumber(window.mock.price.MIN, window.mock.price.MAX),
+        type: getRandomProperty(window.mock.types),
+        rooms: getRandomNumber(window.mock.rooms.MIN, window.mock.rooms.MAX),
+        guests: getRandomNumber(window.mock.guests.MIN, window.mock.guests.MAX),
+        checkin: getRandomElement(window.mock.checkinOut, 0, window.mock.checkinOut.length - 1),
+        checkout: getRandomElement(window.mock.checkinOut, 0, window.mock.checkinOut.length - 1),
+        features: getRandomArray(window.mock.features, 0, window.mock.features.length - 1),
+        description: getRandomElement(window.mock.description, 0, window.mock.description.length - 1),
+        photos: getRandomArray(window.mock.photos, 0, window.mock.photos.length - 1)
       },
       location: {
         x: locationX,
@@ -166,6 +113,11 @@
   };
 
   window.data = {
-    offersData: createOffers(OFFER_NUMBER)
+    offers: createOffers(OFFER_NUMBER),
+    locationXMax: locationXMax,
+    locationXMin: locationPin.X_MIN,
+    locationYMax: locationPin.Y_MAX,
+    locationYMin: locationPin.Y_MIN,
+    menuHeight: OFFERS_HEIGHT
   };
 })();
