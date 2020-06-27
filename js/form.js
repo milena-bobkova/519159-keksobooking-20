@@ -23,7 +23,6 @@
   var adFormTimeOut = adForm.querySelector('select[name="timeout"]');
   var mapFilters = document.querySelector('.map__filters');
   var mapFiltersFieldsets = mapFilters.querySelectorAll('input, select, fieldset');
-  var mapFiltersContainer = document.querySelector('.map__filters-container');
 
   adForm.action = FORM_ACTION;
 
