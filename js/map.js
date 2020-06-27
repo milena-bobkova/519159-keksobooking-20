@@ -12,10 +12,10 @@
   var drawPins = function (offers) {
     var fragment = document.createDocumentFragment();
     offers.forEach(function (offer) {
-      var pin = window.pin.createNodePin(offer);
+      var pin = window.pin.create(offer);
       pin.addEventListener('click', function (evt) {
         evt.preventDefault();
-        mapPins.appendChild(window.card.createNodeCard(offer));
+        mapPins.appendChild(window.card.create(offer));
       });
       fragment.appendChild(pin);
     });

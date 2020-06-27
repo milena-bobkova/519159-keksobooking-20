@@ -2,7 +2,6 @@
 
 (function () {
   var FORM_ACTION = 'https://javascript.pages.academy/keksobooking';
-  var PIN_MAIN_POINTER = 22;
 
   var RoomMinPrice = {
     BUNGALO: 0,
@@ -12,11 +11,9 @@
   };
 
   var map = document.querySelector('.map');
-  var pinMain = document.querySelector('.map__pin--main');
   var mapPins = document.querySelector('.map__pins');
   var adForm = document.querySelector('.ad-form');
-  var adFormFieldsets = adForm.querySelectorAll('fieldset');
-  var adFormAddress = adForm.querySelector('input[name="address"]');
+  var adFormFieldsets = adForm.querySelectorAll('input, select, fieldset');
   var adFormRooms = adForm.querySelector('select[name="rooms"]');
   var adFormCapacity = adForm.querySelector('select[name="capacity"]');
   var adFormTitle = adForm.querySelector('input[name="title"]');
@@ -24,20 +21,10 @@
   var adFormPrice = adForm.querySelector('input[name="price"]');
   var adFormTimeIn = adForm.querySelector('select[name="timein"]');
   var adFormTimeOut = adForm.querySelector('select[name="timeout"]');
+  var mapFilters = document.querySelector('.map__filters');
+  var mapFiltersFieldsets = mapFilters.querySelectorAll('input, select, fieldset');
 
   adForm.action = FORM_ACTION;
-
-  /**
-   * Записывает полученные координаты в поле ввода адреса
-   */
-  var addressCoords = window.coords.getAddressCoords(pinMain);
-  var setAddressCoords = function (isMapActive) {
-    var positionX = Math.round(addressCoords.left + pinMain.offsetWidth / 2);
-    var positionY = Math.round(addressCoords.top + ((isMapActive) ? (pinMain.offsetHeight + PIN_MAIN_POINTER) : (pinMain.offsetHeight / 2)));
-    adFormAddress.value = positionX + ', ' + positionY;
-  };
-
-  adFormAddress.setAttribute('readonly', 'readonly');
 
   /** Изменение состояния fieldset
    * @param {array} fieldsets - массив fieldset-ов
@@ -108,20 +95,41 @@
   };
 
   /**
+   * Деактивация полей формы
+   * @param {array} items - элементы формы
+   */
+  var disabledFields = function (items) {
+    for (var i = 0; i < items.length; i++) {
+      items[i].setAttribute('disabled', 'disabled');
+    }
+  };
+
+  /**
+   * Активация полей формы
+   * @param {array} items - элементы формы
+   */
+  var enabledFields = function (items) {
+    for (var i = 0; i < items.length; i++) {
+      items[i].removeAttribute('disabled');
+    }
+  };
+
+  /**
    * Активное состояние страницы
    */
   var pageActive = function () {
     map.classList.remove('map--faded');
     adForm.classList.remove('ad-form--disabled');
-    mapPins.appendChild(window.map.drawPins(window.data.offersData));
+    mapPins.appendChild(window.map.drawPins(window.data.offers));
     changeFieldset(adFormFieldsets, false);
-    setAddressCoords(true);
     adFormRooms.addEventListener('input', checkRoomsHandler);
     adFormCapacity.addEventListener('input', checkRoomsHandler);
     adFormTimeIn.addEventListener('input', checkTimeInHandler);
     adFormTimeOut.addEventListener('input', checkTimeOutHandler);
     adFormTitle.addEventListener('input', checkTitlesHandler);
     adFormType.addEventListener('change', minPriceHandler);
+    enabledFields(adFormFieldsets);
+    enabledFields(mapFiltersFieldsets);
   };
 
   /**
@@ -131,7 +139,9 @@
     map.classList.add('map--faded');
     adForm.classList.add('ad-form--disabled');
     changeFieldset(adFormFieldsets, true);
-    setAddressCoords(false);
+    window.coords.setAddress(false);
+    disabledFields(adFormFieldsets);
+    disabledFields(mapFiltersFieldsets);
   };
 
   pageInactive();

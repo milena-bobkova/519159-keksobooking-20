@@ -59,6 +59,6 @@
   };
 
   window.card = {
-    createNodeCard: createNodeCard
+    create: createNodeCard
   };
 })();

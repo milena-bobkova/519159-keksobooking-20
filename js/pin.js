@@ -27,6 +27,6 @@
   };
 
   window.pin = {
-    createNodePin: createNodePin
+    create: createNodePin
   };
 })();
