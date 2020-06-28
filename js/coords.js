@@ -25,7 +25,7 @@
     left: window.data.locationXMin,
     top: window.data.locationYMin - pinMain.offsetHeight - PIN_MAIN_POINTER,
     right: window.data.locationXMax - pinMain.offsetWidth,
-    bottom: window.data.locationYMax
+    bottom: window.data.locationYMax - pinMain.offsetHeight - PIN_MAIN_POINTER
   };
 
   var checkPinMainCoords = function () {

@@ -112,8 +112,10 @@
     return offers;
   };
 
+  var offers = createOffers(OFFER_NUMBER);
+
   window.data = {
-    offers: createOffers(OFFER_NUMBER),
+    offers: offers,
     locationXMax: locationXMax,
     locationXMin: locationPin.X_MIN,
     locationYMax: locationPin.Y_MAX,
