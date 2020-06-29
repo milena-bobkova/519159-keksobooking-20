@@ -22,9 +22,9 @@
 
 
   var pinMainCoordsLimit = {
-    left: window.data.locationXMin,
+    left: window.data.locationXMin - pinMain.offsetWidth / 2,
     top: window.data.locationYMin - pinMain.offsetHeight - PIN_MAIN_POINTER,
-    right: window.data.locationXMax - pinMain.offsetWidth,
+    right: window.data.locationXMax - pinMain.offsetWidth / 2,
     bottom: window.data.locationYMax - pinMain.offsetHeight - PIN_MAIN_POINTER
   };
 
