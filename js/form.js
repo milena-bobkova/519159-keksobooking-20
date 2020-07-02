@@ -11,7 +11,6 @@
   };
 
   var map = document.querySelector('.map');
-  var mapPins = document.querySelector('.map__pins');
   var adForm = document.querySelector('.ad-form');
   var adFormFieldsets = adForm.querySelectorAll('input, select, fieldset');
   var adFormRooms = adForm.querySelector('select[name="rooms"]');
@@ -120,7 +119,6 @@
   var pageActive = function () {
     map.classList.remove('map--faded');
     adForm.classList.remove('ad-form--disabled');
-    mapPins.appendChild(window.map.drawPins(window.data.offers));
     changeFieldset(adFormFieldsets, false);
     adFormRooms.addEventListener('input', checkRoomsHandler);
     adFormCapacity.addEventListener('input', checkRoomsHandler);
@@ -130,6 +128,7 @@
     adFormType.addEventListener('change', minPriceHandler);
     enabledFields(adFormFieldsets);
     enabledFields(mapFiltersFieldsets);
+    window.backend.load(window.map.successHandler, window.map.errorHandler);
   };
 
   /**
