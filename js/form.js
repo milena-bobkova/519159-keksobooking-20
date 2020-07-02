@@ -21,7 +21,9 @@
   var adFormTimeIn = adForm.querySelector('select[name="timein"]');
   var adFormTimeOut = adForm.querySelector('select[name="timeout"]');
   var mapFilters = document.querySelector('.map__filters');
+  var mapFiltersContainer = map.querySelector('.map__filters-container');
   var mapFiltersFieldsets = mapFilters.querySelectorAll('input, select, fieldset');
+  var pinMain = document.querySelector('.map__pin--main');
 
   adForm.action = FORM_ACTION;
 
@@ -114,12 +116,72 @@
   };
 
   /**
+   * Функция выводит сообщение в случае успешной отправки данных формы на сервер
+   */
+  var successMessageTemplate = document.querySelector('#success').content.querySelector('.success');
+  var adFormResetButton = document.querySelector('.ad-form__reset');
+
+  var successFormUploadHandler = function () {
+    var message = successMessageTemplate.cloneNode(true);
+    document.querySelector('main').appendChild(message);
+
+    document.addEventListener('keydown', successEscKeyDownHandler);
+    document.addEventListener('click', successWindowClickHandler);
+  };
+
+  /**
+ * Закрытие окна успешной отправки данных нажатием на Esc
+ * @param {*} evt - объект события
+ */
+  var successEscKeyDownHandler = function (evt) {
+    if (evt.key === 'Escape') {
+      document.querySelector('div.success').remove();
+    }
+  };
+
+  /**
+   * Закрытие окна успешной отправки данных нажатием на произвольную область экрана
+   * @param {*} evt - объект события
+   */
+  var successWindowClickHandler = function (evt) {
+    if (evt.target.matches('div.success')) {
+      document.querySelector('div.success').remove();
+    }
+  };
+
+  /**
+   * Функция обработки события при клике на кнопку отправки формы
+   * @param {*} evt - объект события
+   */
+  var adFormSubmitHandler = function (evt) {
+    window.backend.save();
+    successFormUploadHandler();
+    evt.preventDefault();
+    pageInactive();
+  };
+
+  adForm.addEventListener('submit', adFormSubmitHandler);
+
+  /**
+   * Функция обработки события при клике на кнопку очистки формы
+   * @param {*} evt - объект события
+   */
+  var adFormResetButtonClickHandler = function (evt) {
+    evt.preventDefault();
+    pageInactive();
+  };
+
+  adFormResetButton.addEventListener('click', adFormResetButtonClickHandler);
+
+  /**
    * Активное состояние страницы
    */
   var pageActive = function () {
     map.classList.remove('map--faded');
     adForm.classList.remove('ad-form--disabled');
+    mapFiltersContainer.classList.remove('hidden');
     changeFieldset(adFormFieldsets, false);
+    window.coords.setAddress(true);
     adFormRooms.addEventListener('input', checkRoomsHandler);
     adFormCapacity.addEventListener('input', checkRoomsHandler);
     adFormTimeIn.addEventListener('input', checkTimeInHandler);
@@ -128,6 +190,7 @@
     adFormType.addEventListener('change', minPriceHandler);
     enabledFields(adFormFieldsets);
     enabledFields(mapFiltersFieldsets);
+    window.coords.disabledAddress();
     window.backend.load(window.map.successHandler, window.map.errorHandler);
   };
 
@@ -137,10 +200,17 @@
   var pageInactive = function () {
     map.classList.add('map--faded');
     adForm.classList.add('ad-form--disabled');
+    mapFiltersContainer.classList.add('hidden');
+    window.coords.setAddress(false);
     changeFieldset(adFormFieldsets, true);
     window.coords.setAddress(false);
     disabledFields(adFormFieldsets);
     disabledFields(mapFiltersFieldsets);
+    window.map.removePins();
+    pinMain.addEventListener('mousedown', window.coords.pinMainMouseDownHandler);
+    adForm.reset();
+    pinMain.style.top = window.data.pinMainStartCoords.TOP;
+    pinMain.style.left = window.data.pinMainStartCoords.LEFT;
   };
 
   pageInactive();

@@ -25,6 +25,17 @@
   };
 
   /**
+  * Скрытие пинов при неактивной форме
+  * @param {array} pins - массив пинов на карте
+  */
+  var removePins = function () {
+    var pins = document.querySelectorAll('.map__pin:not(.map__pin--main)');
+    pins.forEach(function (pin) {
+      pin.remove();
+    });
+  };
+
+  /**
    * Функция, срабатывающая при неуспешном выполнении запроса на сервер
    * @param {string} errorMessage - текст ошибки
    */
@@ -37,15 +48,40 @@
 
     var errorButton = message.querySelector('.error__button');
     errorButton.addEventListener('click', errorButtonClickHandler);
+    document.addEventListener('keydown', errorEscKeyDownHandler);
+    document.addEventListener('click', errorWindowClickHandler);
   };
 
+  /**
+   * Закрытие окна ошибки нажатием на кнопку
+   */
   var errorButtonClickHandler = function () {
     document.querySelector('div.error').remove();
   };
 
   /**
- * Закрывает карточку
- */
+   * Закрытие окна ошибки нажатием на Esc
+   * @param {*} evt - объект события
+   */
+  var errorEscKeyDownHandler = function (evt) {
+    if (evt.key === 'Escape') {
+      document.querySelector('div.error').remove();
+    }
+  };
+
+  /**
+   * Закрытие окна ошибки нажатием на произвольную область экрана
+   * @param {*} evt - объект события
+   */
+  var errorWindowClickHandler = function (evt) {
+    if (evt.target.matches('div.error')) {
+      document.querySelector('div.error').remove();
+    }
+  };
+
+  /**
+  * Закрывает карточку
+  */
   var closeCard = function () {
     var mapCard = document.querySelector('.map__card');
     mapCard.remove();
@@ -76,6 +112,7 @@
     popupMouseDownCloseHandler: popupMouseDownCloseHandler,
     popupKeydownEscCloseHandler: popupKeydownEscCloseHandler,
     successHandler: successHandler,
-    errorHandler: errorHandler
+    errorHandler: errorHandler,
+    removePins: removePins
   };
 })();
