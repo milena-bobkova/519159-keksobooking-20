@@ -16,6 +16,11 @@
     Y_MAX: 630
   };
 
+  var pinMainStartCoords = {
+    TOP: '375px',
+    LEFT: '570px'
+  };
+
   var locationXMax = document.querySelector('.map').offsetWidth;
 
   /**
@@ -120,6 +125,7 @@
     locationXMin: locationPin.X_MIN,
     locationYMax: locationPin.Y_MAX,
     locationYMin: locationPin.Y_MIN,
-    menuHeight: OFFERS_HEIGHT
+    menuHeight: OFFERS_HEIGHT,
+    pinMainStartCoords: pinMainStartCoords
   };
 })();

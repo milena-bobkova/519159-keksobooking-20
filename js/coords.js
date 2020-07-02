@@ -18,7 +18,12 @@
     adFormAddress.value = positionX + ', ' + positionY;
   };
 
-  adFormAddress.setAttribute('readonly', 'readonly');
+  /**
+   * Неактивное поле адреса
+   */
+  var disabledAddress = function () {
+    adFormAddress.setAttribute('readonly', 'readonly');
+  };
 
 
   var pinMainCoordsLimit = {
@@ -117,6 +122,8 @@
   });
 
   window.coords = {
-    setAddress: setAddressCoords
+    setAddress: setAddressCoords,
+    disabledAddress: disabledAddress,
+    pinMainMouseDownHandler: pinMainMouseDownHandler
   };
 })();
