@@ -32,9 +32,9 @@
    * @param {boolean} isEnabled - состояние элемента массива
    * @param {*} fieldset - элемент массива
    */
-  var changeFieldset = function (fieldsets, isEnabled) {
+  var changeFieldsets = function (fieldsets) {
     fieldsets.forEach(function (fieldset) {
-      fieldset.disabled = isEnabled;
+      fieldset.disabled = true;
     });
   };
 
@@ -118,57 +118,56 @@
   /**
    * Функция выводит сообщение в случае успешной отправки данных формы на сервер
    */
-  var successMessageTemplate = document.querySelector('#success').content.querySelector('.success');
-  var adFormResetButton = document.querySelector('.ad-form__reset');
+  var successHandler = function () {
+    window.main.pageInactive();
+    var successMessageTemplate = document.querySelector('#success').content.querySelector('.success');
+    var successMessage = successMessageTemplate.cloneNode(true);
+    document.querySelector('main').appendChild(successMessage);
 
-  var successFormUploadHandler = function () {
-    var message = successMessageTemplate.cloneNode(true);
-    document.querySelector('main').appendChild(message);
+    /**
+    * Закрытие окна успешной отправки данных нажатием на Esc
+    * @param {*} evt - объект события
+    */
+    var successEscKeyDownHandler = function (evt) {
+      if (evt.key === 'Escape') {
+        successMessage.remove();
+        document.removeEventListener('keydown', successEscKeyDownHandler);
+        document.removeEventListener('click', successWindowClickHandler);
+      }
+    };
 
+    /**
+     * Закрытие окна успешной отправки данных нажатием на произвольную область экрана
+     * @param {*} evt - объект события
+     */
+    var successWindowClickHandler = function (evt) {
+      successMessage.remove();
+      document.removeEventListener('keydown', successEscKeyDownHandler);
+      document.removeEventListener('click', successWindowClickHandler);
+    };
     document.addEventListener('keydown', successEscKeyDownHandler);
     document.addEventListener('click', successWindowClickHandler);
   };
 
   /**
- * Закрытие окна успешной отправки данных нажатием на Esc
- * @param {*} evt - объект события
- */
-  var successEscKeyDownHandler = function (evt) {
-    if (evt.key === 'Escape') {
-      document.querySelector('div.success').remove();
-    }
-  };
-
-  /**
-   * Закрытие окна успешной отправки данных нажатием на произвольную область экрана
-   * @param {*} evt - объект события
-   */
-  var successWindowClickHandler = function (evt) {
-    if (evt.target.matches('div.success')) {
-      document.querySelector('div.success').remove();
-    }
-  };
-
-  /**
    * Функция обработки события при клике на кнопку отправки формы
-   * @param {*} evt - объект события
+   * @param {*} evt - кнопка отправки
    */
   var adFormSubmitHandler = function (evt) {
-    window.backend.save();
-    successFormUploadHandler();
     evt.preventDefault();
-    pageInactive();
+    window.backend.save(new FormData(adForm), successHandler, window.backend.errorHandler);
   };
 
   adForm.addEventListener('submit', adFormSubmitHandler);
 
   /**
    * Функция обработки события при клике на кнопку очистки формы
-   * @param {*} evt - объект события
+   * @param {*} evt - кнопка очистки
    */
+  var adFormResetButton = document.querySelector('.ad-form__reset');
   var adFormResetButtonClickHandler = function (evt) {
     evt.preventDefault();
-    pageInactive();
+    window.main.pageInactive();
   };
 
   adFormResetButton.addEventListener('click', adFormResetButtonClickHandler);
@@ -176,11 +175,9 @@
   /**
    * Активное состояние страницы
    */
-  var pageActive = function () {
-    map.classList.remove('map--faded');
-    adForm.classList.remove('ad-form--disabled');
+  var formActive = function () {
     mapFiltersContainer.classList.remove('hidden');
-    changeFieldset(adFormFieldsets, false);
+    changeFieldsets(adFormFieldsets);
     window.coords.setAddress(true);
     adFormRooms.addEventListener('input', checkRoomsHandler);
     adFormCapacity.addEventListener('input', checkRoomsHandler);
@@ -191,32 +188,27 @@
     enabledFields(adFormFieldsets);
     enabledFields(mapFiltersFieldsets);
     window.coords.disabledAddress();
-    window.backend.load(window.map.successHandler, window.map.errorHandler);
   };
 
   /**
    * Неактивное состояние страницы
    */
-  var pageInactive = function () {
+  var formInactive = function () {
     map.classList.add('map--faded');
     adForm.classList.add('ad-form--disabled');
-    mapFiltersContainer.classList.add('hidden');
     window.coords.setAddress(false);
-    changeFieldset(adFormFieldsets, true);
     window.coords.setAddress(false);
     disabledFields(adFormFieldsets);
     disabledFields(mapFiltersFieldsets);
-    window.map.removePins();
-    pinMain.addEventListener('mousedown', window.coords.pinMainMouseDownHandler);
-    adForm.reset();
-    pinMain.style.top = window.data.pinMainStartCoords.TOP;
-    pinMain.style.left = window.data.pinMainStartCoords.LEFT;
+    mapFiltersContainer.classList.add('hidden');
+
   };
 
-  pageInactive();
+  formInactive();
 
   window.form = {
-    pageActive: pageActive,
-    pageInactive: pageInactive
+    active: formActive,
+    inactive: formInactive,
+    changeFieldsets: changeFieldsets
   };
 })();
