@@ -23,7 +23,6 @@
   var mapFilters = document.querySelector('.map__filters');
   var mapFiltersContainer = map.querySelector('.map__filters-container');
   var mapFiltersFieldsets = mapFilters.querySelectorAll('input, select, fieldset');
-  var pinMain = document.querySelector('.map__pin--main');
 
   adForm.action = FORM_ACTION;
 
@@ -140,7 +139,7 @@
      * Закрытие окна успешной отправки данных нажатием на произвольную область экрана
      * @param {*} evt - объект события
      */
-    var successWindowClickHandler = function (evt) {
+    var successWindowClickHandler = function () {
       successMessage.remove();
       document.removeEventListener('keydown', successEscKeyDownHandler);
       document.removeEventListener('click', successWindowClickHandler);
