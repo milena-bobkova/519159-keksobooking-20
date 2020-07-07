@@ -10,6 +10,7 @@
   var pageActive = function () {
     map.classList.remove('map--faded');
     adForm.classList.remove('ad-form--disabled');
+    mapFiltersContainer.style.display = 'block';
 
     pinMain.removeEventListener('mousedown', window.coords.pinMainMouseDownHandler);
 
