@@ -58,7 +58,12 @@
   */
   var closeCard = function () {
     var mapCard = document.querySelector('.map__card');
-    mapCard.remove();
+    var mapPinActive = document.querySelector('.map__pin--active');
+
+    if (mapCard) {
+      mapCard.remove();
+      mapPinActive.classList.remove('map__pin--active');
+    }
     document.removeEventListener('keydown', cardKeydownEscCloseHandler);
   };
 
