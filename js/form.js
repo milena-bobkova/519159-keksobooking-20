@@ -154,7 +154,7 @@
    */
   var adFormSubmitHandler = function (evt) {
     evt.preventDefault();
-    window.backend.save(new FormData(adForm), successHandler, window.backend.errorHandler);
+    window.backend.saveData(new FormData(adForm), successHandler, window.backend.errorHandler);
   };
 
   adForm.addEventListener('submit', adFormSubmitHandler);

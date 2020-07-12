@@ -15,6 +15,7 @@
     pinMain.removeEventListener('mousedown', window.coords.pinMainMouseDownHandler);
 
     window.form.active();
+    window.backend.loadData(window.map.successHandler, window.backend.errorHandler);
   };
 
   var pageInactive = function () {

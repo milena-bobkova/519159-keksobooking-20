@@ -2,7 +2,6 @@
 
 (function () {
   var FILTERS_HEIGHT = 46;
-  var MAX_RENDERED_PINS = 5;
 
   var Pin = {
     WIDTH: 50,
@@ -36,7 +35,6 @@
   var locationXMax = document.querySelector('.map').offsetWidth;
 
   window.data = {
-    MAX_RENDERED_PINS: MAX_RENDERED_PINS,
     roomTypes: roomTypes,
     locationXMax: locationXMax,
     locationXMin: locationPin.X_MIN,

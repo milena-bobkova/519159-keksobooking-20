@@ -4,6 +4,9 @@
   var URL_GET = 'https://javascript.pages.academy/keksobooking/data';
   var URL_POST = 'https://javascript.pages.academy/keksobooking';
 
+  var REQUEST_GET = 'GET';
+  var REQUEST_POST = 'POST';
+
   var TIMEOUT = 10000;
 
   var StatusCode = {
@@ -39,7 +42,7 @@
 
     xhr.timeout = TIMEOUT;
 
-    xhr.open('GET', URL_GET);
+    xhr.open(REQUEST_GET, URL_GET);
     xhr.send();
   };
 
@@ -59,7 +62,7 @@
       onError('Произошла ошибка соединения');
     });
 
-    xhr.open('POST', URL_POST);
+    xhr.open(REQUEST_POST, URL_POST);
     xhr.send(data);
   };
 
@@ -107,9 +110,17 @@
     }
   };
 
+  var loadData = function (onSuccessEvent, onErrorEvent) {
+    load(onSuccessEvent, onErrorEvent, REQUEST_GET, URL_GET);
+  };
+
+  var saveData = function (onSuccessEvent, onErrorEvent, data) {
+    save(onSuccessEvent, onErrorEvent, REQUEST_GET, URL_GET, data);
+  };
+
   window.backend = {
-    load: load,
-    save: save,
+    loadData: loadData,
+    saveData: saveData,
     errorHandler: errorHandler
   };
 })();
