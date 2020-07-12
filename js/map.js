@@ -48,7 +48,7 @@
    * Отрисовка пинов в случае успешной загрузки данных
    * @param {object} data  - данные с сервера
    */
-  var successHandler = function (data) {
+  var successLoadHandler = function (data) {
     window.map.offersData = data;
     renderPins(data);
   };
@@ -94,6 +94,6 @@
     removePins: removePins,
     removeCards: removeCards,
     closeCard: closeCard,
-    successHandler: successHandler
+    successLoadHandler: successLoadHandler
   };
 })();

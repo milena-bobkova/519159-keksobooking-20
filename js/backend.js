@@ -16,11 +16,14 @@
   var errorMessageTemplate = document.querySelector('#error').content.querySelector('.error');
 
   /**
-   * Функция загрузки данных с сервера
+   * Функция инициализации xhr
    * @param {function} onSuccess - коллбэк, срабатывающий при успешном выполнении запроса
    * @param {Function} onError - коллбэк, срабатывающий при неуспешном выполнении запроса
+   * @param {string} request - тип запроса
+   * @param {string} url - адрес
+   * @param {*} data - данные
    */
-  var load = function (onSuccess, onError) {
+  var load = function (onSuccess, onError, request, url, data) {
     var xhr = new XMLHttpRequest();
     xhr.responseType = 'json';
 
@@ -42,29 +45,30 @@
 
     xhr.timeout = TIMEOUT;
 
-    xhr.open(REQUEST_GET, URL_GET);
-    xhr.send();
-  };
-
-  var save = function (data, onSuccess, onError) {
-    var xhr = new XMLHttpRequest();
-    xhr.responseType = 'json';
-
-    xhr.addEventListener('load', function () {
-      if (xhr.status === StatusCode.OK) {
-        onSuccess(xhr.response);
-      } else {
-        onError('Cтатус ответа: ' + xhr.status + ' ' + xhr.statusText);
-      }
-    });
-
-    xhr.addEventListener('error', function () {
-      onError('Произошла ошибка соединения');
-    });
-
-    xhr.open(REQUEST_POST, URL_POST);
+    xhr.open(request, url);
     xhr.send(data);
   };
+  /*
+   var save = function (data, onSuccess, onError) {
+     var xhr = new XMLHttpRequest();
+     xhr.responseType = 'json';
+
+     xhr.addEventListener('load', function () {
+       if (xhr.status === StatusCode.OK) {
+         onSuccess(xhr.response);
+       } else {
+         onError('Cтатус ответа: ' + xhr.status + ' ' + xhr.statusText);
+       }
+     });
+
+     xhr.addEventListener('error', function () {
+       onError('Произошла ошибка соединения');
+     });
+
+     xhr.open(REQUEST_POST, URL_POST);
+     xhr.send(data);
+   };
+ */
 
   /**
  * Функция, срабатывающая при неуспешном выполнении запроса на сервер
@@ -115,7 +119,7 @@
   };
 
   var saveData = function (onSuccessEvent, onErrorEvent, data) {
-    save(onSuccessEvent, onErrorEvent, REQUEST_GET, URL_GET, data);
+    load(onSuccessEvent, onErrorEvent, REQUEST_POST, URL_POST, data);
   };
 
   window.backend = {
