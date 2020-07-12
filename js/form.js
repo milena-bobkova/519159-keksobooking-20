@@ -96,7 +96,6 @@
     adFormPrice.placeholder = RoomMinPrice[(adFormType.value).toUpperCase()];
   };
 
-  /*
   var validateForm = function (fields) {
     fields.forEach(function (field) {
       field.classList.toggle('form-error', !field.validity.valid);
@@ -106,7 +105,6 @@
   var submitButtonClickHandler = function () {
     validateForm(adFormFields);
   };
-  */
 
   /**
    * Деактивация полей формы
@@ -202,7 +200,7 @@
     enabledFields(adFormFieldsets);
     enabledFields(mapFiltersFieldsets);
     window.coords.disabledAddress();
-    // adFormSubmitButton.addEventListener('click', submitButtonClickHandler);
+    adFormSubmitButton.addEventListener('click', submitButtonClickHandler);
   };
 
   /**
@@ -216,7 +214,7 @@
     disabledFields(adFormFieldsets);
     disabledFields(mapFiltersFieldsets);
     mapFiltersContainer.classList.add('hidden');
-    // adFormSubmitButton.removeEventListener('click', submitButtonClickHandler);
+    adFormSubmitButton.removeEventListener('click', submitButtonClickHandler);
   };
 
   formInactive();

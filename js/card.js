@@ -42,11 +42,12 @@
 
   var hideItem = function (item) {
     item.classList.add('hidden');
-  }
+  };
 
   /**
  * Функция изменения окончаний для блока "Комнаты"
  * @param {*} rooms - блок комнат
+ * @return {string} str
  */
   var pluralizeRooms = function (rooms) {
     var str = '';
@@ -64,10 +65,12 @@
         str = rooms + ' комнаты';
     }
     return str;
-  }
+  };
+
   /**
    * Функция изменения окончаний для блока "Гости"
    * @param {*} guests - блок гостей
+   * @return {string} str
    */
   var pluralizeGuests = function (guests) {
     var str = '';
@@ -84,7 +87,7 @@
         str = ' для ' + guests + ' гостей';
     }
     return str;
-  }
+  };
 
   /**
    * Отображение карточки объявления

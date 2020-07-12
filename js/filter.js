@@ -2,7 +2,6 @@
 
 (function () {
   var DEFAULT_FILTER_VALUE = 'any';
-  var MAX_RENDERED_PINS = 5;
 
   var mapFilters = document.querySelector('.map__filters');
   var housingTypeField = mapFilters.querySelector('#housing-type');
@@ -83,7 +82,6 @@
    */
   var updatePins = function () {
     var filteredAds = window.map.offersData.filter(filterByType).filter(filterByPrice).filter(filterByRooms).filter(filterByGuests).filter(filterByFeatures);
-    console.log(filteredAds);
 
     window.map.renderPins(filteredAds);
   };
