@@ -2,7 +2,7 @@
 
 (function () {
   var mapPinTemplate = document.querySelector('#pin').content.querySelector('.map__pin');
-
+  var map = document.querySelector('.map');
   /**
  * Создает метку объявления
  * @param {object} ad - данные для объявления
@@ -17,6 +17,12 @@
 
     pinElement.style.left = ad.location.x - window.data.Pin.WIDTH / 2 + 'px';
     pinElement.style.top = ad.location.y + window.data.Pin.HEIGHT + 'px';
+
+    pinElement.addEventListener('click', function () {
+      pinElement.classList.add('map__pin--active');
+      map.appendChild(window.card.create(ad));
+      document.addEventListener('keydown', window.map.cardKeydownEscCloseHandler);
+    });
 
     return pinElement;
   };

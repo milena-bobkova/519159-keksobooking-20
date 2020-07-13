@@ -4,6 +4,9 @@
   var URL_GET = 'https://javascript.pages.academy/keksobooking/data';
   var URL_POST = 'https://javascript.pages.academy/keksobooking';
 
+  var REQUEST_GET = 'GET';
+  var REQUEST_POST = 'POST';
+
   var TIMEOUT = 10000;
 
   var StatusCode = {
@@ -13,11 +16,14 @@
   var errorMessageTemplate = document.querySelector('#error').content.querySelector('.error');
 
   /**
-   * Функция загрузки данных с сервера
+   * Функция инициализации xhr
    * @param {function} onSuccess - коллбэк, срабатывающий при успешном выполнении запроса
    * @param {Function} onError - коллбэк, срабатывающий при неуспешном выполнении запроса
+   * @param {string} request - тип запроса
+   * @param {string} url - адрес
+   * @param {*} data - данные
    */
-  var load = function (onSuccess, onError) {
+  var load = function (onSuccess, onError, request, url, data) {
     var xhr = new XMLHttpRequest();
     xhr.responseType = 'json';
 
@@ -39,29 +45,30 @@
 
     xhr.timeout = TIMEOUT;
 
-    xhr.open('GET', URL_GET);
-    xhr.send();
-  };
-
-  var save = function (data, onSuccess, onError) {
-    var xhr = new XMLHttpRequest();
-    xhr.responseType = 'json';
-
-    xhr.addEventListener('load', function () {
-      if (xhr.status === StatusCode.OK) {
-        onSuccess(xhr.response);
-      } else {
-        onError('Cтатус ответа: ' + xhr.status + ' ' + xhr.statusText);
-      }
-    });
-
-    xhr.addEventListener('error', function () {
-      onError('Произошла ошибка соединения');
-    });
-
-    xhr.open('POST', URL_POST);
+    xhr.open(request, url);
     xhr.send(data);
   };
+  /*
+   var save = function (data, onSuccess, onError) {
+     var xhr = new XMLHttpRequest();
+     xhr.responseType = 'json';
+
+     xhr.addEventListener('load', function () {
+       if (xhr.status === StatusCode.OK) {
+         onSuccess(xhr.response);
+       } else {
+         onError('Cтатус ответа: ' + xhr.status + ' ' + xhr.statusText);
+       }
+     });
+
+     xhr.addEventListener('error', function () {
+       onError('Произошла ошибка соединения');
+     });
+
+     xhr.open(REQUEST_POST, URL_POST);
+     xhr.send(data);
+   };
+ */
 
   /**
  * Функция, срабатывающая при неуспешном выполнении запроса на сервер
@@ -107,9 +114,17 @@
     }
   };
 
+  var loadData = function (onSuccessEvent, onErrorEvent) {
+    load(onSuccessEvent, onErrorEvent, REQUEST_GET, URL_GET);
+  };
+
+  var saveData = function (onSuccessEvent, onErrorEvent, data) {
+    load(onSuccessEvent, onErrorEvent, REQUEST_POST, URL_POST, data);
+  };
+
   window.backend = {
-    load: load,
-    save: save,
+    loadData: loadData,
+    saveData: saveData,
     errorHandler: errorHandler
   };
 })();

@@ -12,7 +12,9 @@
 
   var map = document.querySelector('.map');
   var adForm = document.querySelector('.ad-form');
+  var adFormSubmitButton = adForm.querySelector('.ad-form__submit');
   var adFormFieldsets = adForm.querySelectorAll('input, select, fieldset');
+  var adFormFields = adForm.querySelectorAll('input, select');
   var adFormRooms = adForm.querySelector('select[name="rooms"]');
   var adFormCapacity = adForm.querySelector('select[name="capacity"]');
   var adFormTitle = adForm.querySelector('input[name="title"]');
@@ -94,6 +96,16 @@
     adFormPrice.placeholder = RoomMinPrice[(adFormType.value).toUpperCase()];
   };
 
+  var validateForm = function (fields) {
+    fields.forEach(function (field) {
+      field.classList.toggle('form-error', !field.validity.valid);
+    });
+  };
+
+  var submitButtonClickHandler = function () {
+    validateForm(adFormFields);
+  };
+
   /**
    * Деактивация полей формы
    * @param {array} items - элементы формы
@@ -117,7 +129,7 @@
   /**
    * Функция выводит сообщение в случае успешной отправки данных формы на сервер
    */
-  var successHandler = function () {
+  var successSaveHandler = function () {
     window.main.pageInactive();
     var successMessageTemplate = document.querySelector('#success').content.querySelector('.success');
     var successMessage = successMessageTemplate.cloneNode(true);
@@ -149,12 +161,13 @@
   };
 
   /**
-   * Функция обработки события при клике на кнопку отправки формы
-   * @param {*} evt - кнопка отправки
+   * Функция обработки события отправки формы
+   * @param {*} evt - объект события
    */
   var adFormSubmitHandler = function (evt) {
     evt.preventDefault();
-    window.backend.save(new FormData(adForm), successHandler, window.backend.errorHandler);
+    window.backend.saveData(new FormData(adForm), successSaveHandler, window.backend.errorHandler);
+    window.main.pageInactive();
   };
 
   adForm.addEventListener('submit', adFormSubmitHandler);
@@ -164,12 +177,12 @@
    * @param {*} evt - кнопка очистки
    */
   var adFormResetButton = document.querySelector('.ad-form__reset');
-  var adFormResetButtonClickHandler = function (evt) {
+  var resetButtonClickHandler = function (evt) {
     evt.preventDefault();
     window.main.pageInactive();
   };
 
-  adFormResetButton.addEventListener('click', adFormResetButtonClickHandler);
+  adFormResetButton.addEventListener('click', resetButtonClickHandler);
 
   /**
    * Активное состояние страницы
@@ -187,6 +200,7 @@
     enabledFields(adFormFieldsets);
     enabledFields(mapFiltersFieldsets);
     window.coords.disabledAddress();
+    adFormSubmitButton.addEventListener('click', submitButtonClickHandler);
   };
 
   /**
@@ -200,7 +214,7 @@
     disabledFields(adFormFieldsets);
     disabledFields(mapFiltersFieldsets);
     mapFiltersContainer.classList.add('hidden');
-
+    adFormSubmitButton.removeEventListener('click', submitButtonClickHandler);
   };
 
   formInactive();
