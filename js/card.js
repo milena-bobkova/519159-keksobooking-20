@@ -44,49 +44,36 @@
     item.classList.add('hidden');
   };
 
-  /**
- * Функция изменения окончаний для блока "Комнаты"
- * @param {*} rooms - блок комнат
- * @return {string} str
- */
-  var pluralizeRooms = function (rooms) {
-    var str = '';
-
-    switch (rooms) {
-      case 1:
-        str = '1 комната';
-        break;
-
-      case 100:
-        str = ' 100 комнат';
-        break;
-
+  var getRoomsPluralForm = function (number, one, two, many) {
+    var mod10 = number % 10;
+    var mod100 = number % 100;
+    switch (true) {
+      case (mod100 >= 11 && mod100 <= 20):
+        return number + many;
+      case (mod10 > 5):
+        return number + many;
+      case (mod10 === 1):
+        return number + one;
+      case (mod10 >= 2 && mod10 <= 4):
+        return number + two;
       default:
-        str = rooms + ' комнаты';
+        return number + many;
     }
-    return str;
   };
 
-  /**
-   * Функция изменения окончаний для блока "Гости"
-   * @param {*} guests - блок гостей
-   * @return {string} str
-   */
-  var pluralizeGuests = function (guests) {
-    var str = '';
-
-    switch (guests) {
-      case 0:
-        break;
-
-      case 1:
-        str = ' для 1 гостя';
-        break;
-
+  var getGuestsPluralForm = function (number, one, many) {
+    var mod10 = number % 10;
+    var mod100 = number % 100;
+    switch (true) {
+      case (mod100 >= 11 && mod100 <= 20):
+        return number + many;
+      case (mod10 >= 2):
+        return number + many;
+      case (mod10 === 1):
+        return number + one;
       default:
-        str = ' для ' + guests + ' гостей';
+        return number + many;
     }
-    return str;
   };
 
   /**
@@ -129,7 +116,15 @@
     }
 
     if (ad.offer.rooms || ad.offer.guests) {
-      cardElementCapacity.textContent = pluralizeRooms(ad.offer.rooms) + pluralizeGuests(ad.offer.guests);
+      cardElementCapacity.textContent =
+        getRoomsPluralForm(ad.offer.rooms,
+          window.data.roomsNoun.one,
+          window.data.roomsNoun.some,
+          window.data.roomsNoun.many) +
+        getGuestsPluralForm(ad.offer.guests,
+          window.data.guestsNoun.one,
+          window.data.guestsNoun.many,
+          window.data.guestsNoun.noGuests);
     } else {
       hideItem(cardElementCapacity);
     }

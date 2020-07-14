@@ -14,12 +14,17 @@
     house: 'Дом',
     bungalo: 'Бунгало'
   };
-  /*
-   var Avatar = {
-     NAME: 'img/avatars/user0',
-     EXTENSION: '.png'
-   };
-   */
+
+  var roomsNoun = {
+    one: ' комната для ',
+    some: ' комнаты для ',
+    many: ' комнат для '
+  };
+
+  var guestsNoun = {
+    one: ' гостя',
+    many: ' гостей'
+  };
 
   var locationPin = {
     X_MIN: 0,
@@ -49,6 +54,8 @@
     menuHeight: FILTERS_HEIGHT,
     pinMainStartCoords: pinMainStartCoords,
     Pin: Pin,
-    PhotoPreviewElement: PhotoPreviewElement
+    PhotoPreviewElement: PhotoPreviewElement,
+    roomsNoun: roomsNoun,
+    guestsNoun: guestsNoun
   };
 })();
