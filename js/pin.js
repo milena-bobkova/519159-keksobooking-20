@@ -16,7 +16,7 @@
     pinAvatar.alt = ad.offer.title;
 
     pinElement.style.left = ad.location.x - window.data.Pin.WIDTH / 2 + 'px';
-    pinElement.style.top = ad.location.y + window.data.Pin.HEIGHT + 'px';
+    pinElement.style.top = ad.location.y - window.data.Pin.HEIGHT + 'px';
 
     pinElement.addEventListener('click', function () {
       pinElement.classList.add('map__pin--active');

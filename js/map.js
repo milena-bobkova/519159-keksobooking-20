@@ -1,8 +1,6 @@
 'use strict';
 
 (function () {
-  var MAX_RENDERED_PINS = 5;
-
   var map = document.querySelector('.map');
   var mapPins = map.querySelector('.map__pins');
 
@@ -36,9 +34,7 @@
 
   var renderPins = function (ads) {
     var fragment = document.createDocumentFragment();
-
-    var pinsNumber = ads.length > MAX_RENDERED_PINS ? MAX_RENDERED_PINS : ads.length;
-    ads.slice(0, pinsNumber).forEach(function (ad) {
+    ads.forEach(function (ad) {
       fragment.appendChild(window.pin.create(ad));
     });
     mapPins.appendChild(fragment);
@@ -50,7 +46,7 @@
    */
   var successLoadHandler = function (data) {
     window.map.offersData = data;
-    renderPins(data);
+    window.filter.updatePins();
   };
 
   /**

@@ -48,27 +48,6 @@
     xhr.open(request, url);
     xhr.send(data);
   };
-  /*
-   var save = function (data, onSuccess, onError) {
-     var xhr = new XMLHttpRequest();
-     xhr.responseType = 'json';
-
-     xhr.addEventListener('load', function () {
-       if (xhr.status === StatusCode.OK) {
-         onSuccess(xhr.response);
-       } else {
-         onError('Cтатус ответа: ' + xhr.status + ' ' + xhr.statusText);
-       }
-     });
-
-     xhr.addEventListener('error', function () {
-       onError('Произошла ошибка соединения');
-     });
-
-     xhr.open(REQUEST_POST, URL_POST);
-     xhr.send(data);
-   };
- */
 
   /**
  * Функция, срабатывающая при неуспешном выполнении запроса на сервер
