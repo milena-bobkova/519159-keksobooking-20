@@ -29,14 +29,18 @@
 
     var filteredAds = window.map.offersData.filter(function (ad) {
 
-      var housingType = housingTypeField.value === DEFAULT_FILTER_VALUE ? true : housingTypeField.value === ad.offer.type;
+      var housingType = housingTypeField.value === DEFAULT_FILTER_VALUE ?
+        true : housingTypeField.value === ad.offer.type;
 
-      var housingPrice = housingPriceField.value === DEFAULT_FILTER_VALUE ? true : ad.offer.price >= housingPriceValue[housingPriceField.value].min && ad.offer.price <= housingPriceValue[housingPriceField.value].max;
+      var housingPrice = housingPriceField.value === DEFAULT_FILTER_VALUE ?
+        true : ad.offer.price >= housingPriceValue[housingPriceField.value].min &&
+        ad.offer.price <= housingPriceValue[housingPriceField.value].max;
 
-      var housingRooms = housingRoomsField.value === DEFAULT_FILTER_VALUE ? true : parseInt(housingRoomsField.value, 10) === ad.offer.rooms;
+      var housingRooms = housingRoomsField.value === DEFAULT_FILTER_VALUE ?
+        true : parseInt(housingRoomsField.value, 10) === ad.offer.rooms;
 
-
-      var housingGuests = housingGuestsField.value === DEFAULT_FILTER_VALUE ? true : parseInt(housingGuestsField.value, 10) === ad.offer.guests;
+      var housingGuests = housingGuestsField.value === DEFAULT_FILTER_VALUE ?
+        true : parseInt(housingGuestsField.value, 10) === ad.offer.guests;
 
       var changedFeatures = Array.from(mapFilters.querySelectorAll('.map__checkbox:checked')).map(function (feature) {
         return feature.value;
@@ -49,7 +53,8 @@
       return housingType && housingPrice && housingRooms && housingGuests && housingFeatures;
     });
 
-    var pinsNumber = filteredAds.length > MAX_RENDERED_PINS ? MAX_RENDERED_PINS : filteredAds.length;
+    var pinsNumber = filteredAds.length > MAX_RENDERED_PINS ?
+      MAX_RENDERED_PINS : filteredAds.length;
     var filteredByNumberAds = filteredAds.slice(0, pinsNumber);
 
     window.map.renderPins(filteredByNumberAds);
