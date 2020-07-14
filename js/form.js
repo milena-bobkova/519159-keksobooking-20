@@ -201,6 +201,8 @@
     enabledFields(mapFiltersFieldsets);
     window.coords.disabledAddress();
     adFormSubmitButton.addEventListener('click', submitButtonClickHandler);
+    window.photo.avatarChooser.addEventListener('change', window.photo.avatarChooseHandler);
+    window.photo.photoChooser.addEventListener('change', window.photo.photoChooseHandler);
   };
 
   /**
