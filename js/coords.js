@@ -54,7 +54,7 @@
    */
   var pinMainKeyDownHandler = function (evt) {
     if (evt.key === 'Enter') {
-      window.form.pageActive();
+      window.main.pageActive();
     }
     pinMain.removeEventListener('mousedown', pinMainMouseDownHandler);
     pinMain.removeEventListener('keydown', pinMainKeyDownHandler);

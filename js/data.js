@@ -35,9 +35,9 @@
   var locationXMax = document.querySelector('.map').offsetWidth;
 
   var PhotoPreviewElement = {
-    PHOTO_PREVIEW_ALT: 'Изображение жилья',
-    PHOTO_PREVIEW_WIDTH: '70px',
-    PHOTO_PREVIEW_HEIGHT: '70px'
+    ALT: 'Изображение жилья',
+    WIDTH: '70px',
+    HEIGHT: '70px'
   };
 
   window.data = {

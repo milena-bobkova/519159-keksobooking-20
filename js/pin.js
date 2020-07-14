@@ -19,6 +19,7 @@
     pinElement.style.top = ad.location.y - window.data.Pin.HEIGHT + 'px';
 
     pinElement.addEventListener('click', function () {
+      window.map.closeCard();
       pinElement.classList.add('map__pin--active');
       map.appendChild(window.card.create(ad));
       document.addEventListener('keydown', window.map.cardKeydownEscCloseHandler);
