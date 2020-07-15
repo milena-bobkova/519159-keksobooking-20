@@ -34,14 +34,15 @@
   };
 
   var roomsNoun = {
-    one: ' комната для ',
-    some: ' комнаты для ',
-    many: ' комнат для '
+    one: 'комната',
+    some: 'комнаты',
+    many: 'комнат'
   };
 
   var guestsNoun = {
-    one: ' гостя',
-    many: ' гостей'
+    one: 'гость',
+    some: 'гостя',
+    many: 'гостей'
   };
 
   var locationXMax = document.querySelector('.map').offsetWidth;
