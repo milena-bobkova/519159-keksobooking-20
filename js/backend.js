@@ -79,6 +79,7 @@
    */
   var errorEscKeyDownHandler = function (evt) {
     if (window.util.isEscPressed) {
+      evt.preventDefault();
       document.querySelector('div.error').remove();
     }
   };

@@ -54,6 +54,7 @@
    */
   var pinMainKeyDownHandler = function (evt) {
     if (window.util.isEnterPressed) {
+      evt.preventDefault();
       window.main.pageActive();
     }
     pinMain.removeEventListener('mousedown', pinMainMouseDownHandler);
@@ -66,6 +67,7 @@
    */
   var pinMainMouseDownHandler = function (evt) {
     if (window.util.isMouseDownLeft) {
+      evt.preventDefault();
       window.main.pageActive();
     }
     pinMain.removeEventListener('mousedown', pinMainMouseDownHandler);

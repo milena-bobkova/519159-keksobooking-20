@@ -126,6 +126,7 @@
     */
     var successEscKeyDownHandler = function (evt) {
       if (window.util.isEscPressed) {
+        evt.preventDefault();
         successMessage.remove();
         document.removeEventListener('keydown', successEscKeyDownHandler);
         document.removeEventListener('click', successWindowClickHandler);

@@ -54,6 +54,7 @@
    * @param {string} one - ед. число
    * @param {string} two - множ. число
    * @param {string} many - множ. число
+   * @return {string}
    */
   var getRoomsPluralForm = function (number, one, two, many) {
     var mod10 = number % 10;
@@ -77,6 +78,7 @@
    * @param {number} number - количество гостей
    * @param {string} one - ед. число
    * @param {string} many - множ. число
+   * @return {string}
    */
   var getGuestsPluralForm = function (number, one, many) {
     var mod10 = number % 10;
@@ -134,14 +136,8 @@
 
     if (ad.offer.rooms || ad.offer.guests) {
       cardCapacity.textContent =
-        getRoomsPluralForm(ad.offer.rooms,
-          window.data.roomsNoun.one,
-          window.data.roomsNoun.some,
-          window.data.roomsNoun.many) +
-        getGuestsPluralForm(ad.offer.guests,
-          window.data.guestsNoun.one,
-          window.data.guestsNoun.many,
-          window.data.guestsNoun.noGuests);
+        getRoomsPluralForm(ad.offer.rooms, window.data.roomsNoun.one, window.data.roomsNoun.some, window.data.roomsNoun.many) +
+        getGuestsPluralForm(ad.offer.guests, window.data.guestsNoun.one, window.data.guestsNoun.many, window.data.guestsNoun.noGuests);
     } else {
       hideItem(cardCapacity);
     }

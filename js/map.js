@@ -69,6 +69,7 @@
    */
   var cardMouseDownCloseHandler = function (evt) {
     if (window.util.isMouseDownLeft) {
+      evt.preventDefault();
       closeCard();
     }
   };
@@ -79,6 +80,7 @@
    */
   var cardKeydownEscCloseHandler = function (evt) {
     if (window.util.isEscPressed) {
+      evt.preventDefault();
       closeCard();
     }
   };

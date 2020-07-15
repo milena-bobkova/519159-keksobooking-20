@@ -1,3 +1,5 @@
+'use strict';
+
 (function () {
   var ENTER_KEYCODE = 13;
   var ESC_KEYCODE = 27;
@@ -11,7 +13,7 @@
       return evt.keyCode === ESC_KEYCODE;
     },
     isMouseDownLeft: function (evt) {
-      return evt.which === MOUSEDOWN_LEFT
+      return evt.which === MOUSEDOWN_LEFT;
     },
   };
 })();
