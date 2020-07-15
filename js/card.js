@@ -5,11 +5,11 @@
 
   /**
    * Данные для карточки объявления - преимущества
-   * @param {object} cardElement - DOM-элемент карточки объявления
+   * @param {object} card - DOM-элемент карточки объявления
    * @param {object} ad - данные объявления
    */
-  var getCardFeatures = function (cardElement, ad) {
-    var featuresCollection = cardElement.querySelectorAll('.popup__feature');
+  var getCardFeatures = function (card, ad) {
+    var featuresCollection = card.querySelectorAll('.popup__feature');
 
     featuresCollection.forEach(function (feature) {
       var newFeatureCollection = feature.className.split('--');
@@ -21,11 +21,11 @@
 
   /**
    * Данные для карточки объявления - фото жилья
-   * @param {object} cardElement - DOM-элемент карточки объявления
+   * @param {object} card - DOM-элемент карточки объявления
    * @param {object} ad - данные объявления
    */
-  var getCardPictures = function (cardElement, ad) {
-    var picturesContainer = cardElement.querySelector('.popup__photos');
+  var getCardPictures = function (card, ad) {
+    var picturesContainer = card.querySelector('.popup__photos');
     var popupPicture = picturesContainer.querySelector('.popup__photo');
     if (ad.offer.photos.length) {
       popupPicture.src = ad.offer.photos[0];
@@ -40,10 +40,21 @@
     }
   };
 
+  /**
+   * Функция скрытия элемента
+   * @param {*} item - элемент
+   */
   var hideItem = function (item) {
     item.classList.add('hidden');
   };
 
+  /**
+   * Функция плюрализации блока комнат
+   * @param {number} number - количество комнат
+   * @param {string} one - ед. число
+   * @param {string} two - множ. число
+   * @param {string} many - множ. число
+   */
   var getRoomsPluralForm = function (number, one, two, many) {
     var mod10 = number % 10;
     var mod100 = number % 100;
@@ -61,6 +72,12 @@
     }
   };
 
+  /**
+   * Функция плюрализации блока гостей
+   * @param {number} number - количество гостей
+   * @param {string} one - ед. число
+   * @param {string} many - множ. число
+   */
   var getGuestsPluralForm = function (number, one, many) {
     var mod10 = number % 10;
     var mod100 = number % 100;
@@ -82,41 +99,41 @@
    * @return {object} - сгенерированная карточка
    */
   var createNodeCard = function (ad) {
-    var cardElement = mapCardTemplate.cloneNode(true);
-    var cardElementPrice = cardElement.querySelector('.popup__text--price');
-    var cardElementCapacity = cardElement.querySelector('.popup__text--capacity');
-    var cardElementTime = cardElement.querySelector('.popup__text--time');
-    var cardElementAvatar = cardElement.querySelector('.popup__avatar');
+    var card = mapCardTemplate.cloneNode(true);
+    var cardPrice = card.querySelector('.popup__text--price');
+    var cardCapacity = card.querySelector('.popup__text--capacity');
+    var cardTime = card.querySelector('.popup__text--time');
+    var cardAvatar = card.querySelector('.popup__avatar');
 
-    var cardCloseButon = cardElement.querySelector('.popup__close');
-    cardElement.querySelector('.popup__title').textContent = ad.offer.title;
-    cardElement.querySelector('.popup__text--address').textContent = ad.offer.address;
-    cardElementPrice.textContent = ad.offer.price + ' ₽/ночь';
-    cardElement.querySelector('.popup__type').textContent = window.data.roomTypes[ad.offer.type];
-    cardElementCapacity.textContent = ad.offer.rooms + ' комнаты для ' + ad.offer.guests + ' гостей';
-    cardElementTime.textContent = 'Заезд после ' + ad.offer.checkin + ', выезд до ' + ad.offer.checkout;
-    cardElement.querySelector('.popup__description').textContent = ad.offer.description;
-    cardElementAvatar.src = ad.author.avatar;
+    var cardCloseButon = card.querySelector('.popup__close');
+    card.querySelector('.popup__title').textContent = ad.offer.title;
+    card.querySelector('.popup__text--address').textContent = ad.offer.address;
+    cardPrice.textContent = ad.offer.price + ' ₽/ночь';
+    card.querySelector('.popup__type').textContent = window.data.roomTypes[ad.offer.type];
+    cardCapacity.textContent = ad.offer.rooms + ' комнаты для ' + ad.offer.guests + ' гостей';
+    cardTime.textContent = 'Заезд после ' + ad.offer.checkin + ', выезд до ' + ad.offer.checkout;
+    card.querySelector('.popup__description').textContent = ad.offer.description;
+    cardAvatar.src = ad.author.avatar;
 
-    getCardFeatures(cardElement, ad);
-    getCardPictures(cardElement, ad);
+    getCardFeatures(card, ad);
+    getCardPictures(card, ad);
 
     cardCloseButon.addEventListener('click', window.map.cardMouseDownCloseHandler);
 
     if (ad.offer.price) {
-      cardElementPrice.textContent = ad.offer.price + ' ₽/ночь';
+      cardPrice.textContent = ad.offer.price + ' ₽/ночь';
     } else {
-      hideItem(cardElementPrice);
+      hideItem(cardPrice);
     }
 
     if (ad.offer.checkin && ad.offer.checkout) {
-      cardElementTime.textContent = 'заезд после ' + ad.offer.checkin + ', выезд до ' + ad.offer.checkout;
+      cardTime.textContent = 'заезд после ' + ad.offer.checkin + ', выезд до ' + ad.offer.checkout;
     } else {
-      hideItem(cardElementTime);
+      hideItem(cardTime);
     }
 
     if (ad.offer.rooms || ad.offer.guests) {
-      cardElementCapacity.textContent =
+      cardCapacity.textContent =
         getRoomsPluralForm(ad.offer.rooms,
           window.data.roomsNoun.one,
           window.data.roomsNoun.some,
@@ -126,10 +143,10 @@
           window.data.guestsNoun.many,
           window.data.guestsNoun.noGuests);
     } else {
-      hideItem(cardElementCapacity);
+      hideItem(cardCapacity);
     }
 
-    return cardElement;
+    return card;
   };
 
   window.card = {

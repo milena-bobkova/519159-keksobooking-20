@@ -33,8 +33,8 @@
     window.form.disabledFields(mapFiltersFieldsets);
 
     pinMain.addEventListener('mousedown', window.coords.pinMainMouseDownHandler);
-    pinMain.style.top = window.data.pinMainStartCoords.TOP;
-    pinMain.style.left = window.data.pinMainStartCoords.LEFT;
+    pinMain.style.top = window.data.PinMainStartCoords.TOP;
+    pinMain.style.left = window.data.PinMainStartCoords.LEFT;
   };
 
   pageInactive();

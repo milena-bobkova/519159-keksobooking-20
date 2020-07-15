@@ -25,6 +25,9 @@
     }
   };
 
+  /**
+   * Функция фильтрации объявлений
+   */
   var updatePins = function () {
 
     var filteredAds = window.map.offersData.filter(function (ad) {

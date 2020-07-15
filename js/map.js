@@ -68,7 +68,7 @@
    * @param {*} evt - объект события
    */
   var cardMouseDownCloseHandler = function (evt) {
-    if (evt.which === 1) {
+    if (window.util.isMouseDownLeft) {
       closeCard();
     }
   };
@@ -78,7 +78,7 @@
    * @param {*} evt - объект события
    */
   var cardKeydownEscCloseHandler = function (evt) {
-    if (evt.key === 'Escape') {
+    if (window.util.isEscPressed) {
       closeCard();
     }
   };

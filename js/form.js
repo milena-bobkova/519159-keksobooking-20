@@ -125,7 +125,7 @@
     * @param {*} evt - объект события
     */
     var successEscKeyDownHandler = function (evt) {
-      if (evt.key === 'Escape') {
+      if (window.util.isEscPressed) {
         successMessage.remove();
         document.removeEventListener('keydown', successEscKeyDownHandler);
         document.removeEventListener('click', successWindowClickHandler);
@@ -175,15 +175,19 @@
   var formActive = function () {
     adForm.classList.remove('ad-form--disabled');
     window.coords.setAddress(true);
+    window.coords.disabledAddress();
+
     adFormRooms.addEventListener('input', checkRoomsHandler);
     adFormCapacity.addEventListener('input', checkRoomsHandler);
     adFormTimeIn.addEventListener('input', checkTimeInHandler);
     adFormTimeOut.addEventListener('input', checkTimeOutHandler);
     adFormTitle.addEventListener('input', checkTitlesHandler);
     adFormType.addEventListener('change', minPriceHandler);
+
     enabledFields(adFormFieldsets);
-    window.coords.disabledAddress();
+
     adFormSubmitButton.addEventListener('click', submitButtonClickHandler);
+
     window.photo.avatarChooser.addEventListener('change', window.photo.avatarChooseHandler);
     window.photo.photoChooser.addEventListener('change', window.photo.photoChooseHandler);
   };
@@ -193,9 +197,12 @@
    */
   var formInactive = function () {
     adForm.classList.add('ad-form--disabled');
+
     window.coords.setAddress(false);
     window.coords.setAddress(false);
+
     disabledFields(adFormFieldsets);
+
     adFormSubmitButton.removeEventListener('click', submitButtonClickHandler);
   };
 
