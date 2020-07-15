@@ -61,15 +61,15 @@
     var mod100 = number % 100;
     switch (true) {
       case (mod100 >= 11 && mod100 <= 20):
-        return number + ' ' + many + ', ';
+        return number + ' ' + many;
       case (mod10 > 5):
-        return number + ' ' + many + ', ';
+        return number + ' ' + many;
       case (mod10 === 1):
-        return number + ' ' + one + ', ';
+        return number + ' ' + one;
       case (mod10 >= 2 && mod10 <= 4):
-        return number + ' ' + two + ', ';
+        return number + ' ' + two;
       default:
-        return number + ' ' + many + ', ';
+        return number + ' ' + many;
     }
   };
 
@@ -114,7 +114,7 @@
 
     if (ad.offer.rooms || ad.offer.guests) {
       cardCapacity.textContent =
-        getNounPluralForm(ad.offer.rooms, window.data.roomsNoun.one, window.data.roomsNoun.some, window.data.roomsNoun.many) +
+        getNounPluralForm(ad.offer.rooms, window.data.roomsNoun.one, window.data.roomsNoun.some, window.data.roomsNoun.many) + ', ' +
         getNounPluralForm(ad.offer.guests, window.data.guestsNoun.one, window.data.guestsNoun.some, window.data.guestsNoun.many);
     } else {
       hideItem(cardCapacity);
