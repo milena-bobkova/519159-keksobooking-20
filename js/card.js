@@ -49,49 +49,27 @@
   };
 
   /**
-   * Функция плюрализации блока комнат
-   * @param {number} number - количество комнат
+   * Функция изменения склонения
+   * @param {number} number - количество комнат/гостей
    * @param {string} one - ед. число
    * @param {string} two - множ. число
    * @param {string} many - множ. число
    * @return {string}
    */
-  var getRoomsPluralForm = function (number, one, two, many) {
+  var getNounPluralForm = function (number, one, two, many) {
     var mod10 = number % 10;
     var mod100 = number % 100;
     switch (true) {
       case (mod100 >= 11 && mod100 <= 20):
-        return number + many;
+        return number + ' ' + many + ', ';
       case (mod10 > 5):
-        return number + many;
+        return number + ' ' + many + ', ';
       case (mod10 === 1):
-        return number + one;
+        return number + ' ' + one + ', ';
       case (mod10 >= 2 && mod10 <= 4):
-        return number + two;
+        return number + ' ' + two + ', ';
       default:
-        return number + many;
-    }
-  };
-
-  /**
-   * Функция плюрализации блока гостей
-   * @param {number} number - количество гостей
-   * @param {string} one - ед. число
-   * @param {string} many - множ. число
-   * @return {string}
-   */
-  var getGuestsPluralForm = function (number, one, many) {
-    var mod10 = number % 10;
-    var mod100 = number % 100;
-    switch (true) {
-      case (mod100 >= 11 && mod100 <= 20):
-        return number + many;
-      case (mod10 >= 2):
-        return number + many;
-      case (mod10 === 1):
-        return number + one;
-      default:
-        return number + many;
+        return number + ' ' + many + ', ';
     }
   };
 
@@ -136,8 +114,8 @@
 
     if (ad.offer.rooms || ad.offer.guests) {
       cardCapacity.textContent =
-        getRoomsPluralForm(ad.offer.rooms, window.data.roomsNoun.one, window.data.roomsNoun.some, window.data.roomsNoun.many) +
-        getGuestsPluralForm(ad.offer.guests, window.data.guestsNoun.one, window.data.guestsNoun.many, window.data.guestsNoun.noGuests);
+        getNounPluralForm(ad.offer.rooms, window.data.roomsNoun.one, window.data.roomsNoun.some, window.data.roomsNoun.many) +
+        getNounPluralForm(ad.offer.guests, window.data.guestsNoun.one, window.data.guestsNoun.some, window.data.guestsNoun.many);
     } else {
       hideItem(cardCapacity);
     }
