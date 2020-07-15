@@ -13,7 +13,7 @@
     OK: 200
   };
 
-  var errorMessageTemplate = document.querySelector('#error').content.querySelector('.error');
+  var messageErrorTemplate = document.querySelector('#error').content.querySelector('.error');
 
   /**
    * Функция инициализации xhr
@@ -48,36 +48,15 @@
     xhr.open(request, url);
     xhr.send(data);
   };
-  /*
-   var save = function (data, onSuccess, onError) {
-     var xhr = new XMLHttpRequest();
-     xhr.responseType = 'json';
-
-     xhr.addEventListener('load', function () {
-       if (xhr.status === StatusCode.OK) {
-         onSuccess(xhr.response);
-       } else {
-         onError('Cтатус ответа: ' + xhr.status + ' ' + xhr.statusText);
-       }
-     });
-
-     xhr.addEventListener('error', function () {
-       onError('Произошла ошибка соединения');
-     });
-
-     xhr.open(REQUEST_POST, URL_POST);
-     xhr.send(data);
-   };
- */
 
   /**
  * Функция, срабатывающая при неуспешном выполнении запроса на сервер
- * @param {string} errorMessage - текст ошибки
+ * @param {string} messageError - текст ошибки
  */
-  var errorHandler = function (errorMessage) {
-    var message = errorMessageTemplate.cloneNode(true);
-    var errorText = message.querySelector('.error__message');
-    errorText.textContent = errorMessage;
+  var errorHandler = function (messageError) {
+    var message = messageErrorTemplate.cloneNode(true);
+    var textError = message.querySelector('.error__message');
+    textError.textContent = messageError;
 
     document.querySelector('main').appendChild(message);
 
@@ -99,7 +78,8 @@
    * @param {*} evt - объект события
    */
   var errorEscKeyDownHandler = function (evt) {
-    if (evt.key === 'Escape') {
+    if (window.util.isEscPressed) {
+      evt.preventDefault();
       document.querySelector('div.error').remove();
     }
   };

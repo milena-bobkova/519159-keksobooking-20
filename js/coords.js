@@ -14,7 +14,8 @@
   */
   var setAddressCoords = function (isMapActive) {
     var positionX = Math.round(pinMain.offsetLeft + pinMain.offsetWidth / 2);
-    var positionY = Math.round(pinMain.offsetTop + ((isMapActive) ? (pinMain.offsetHeight + PIN_MAIN_POINTER) : (pinMain.offsetHeight / 2)));
+    var positionY = Math.round(pinMain.offsetTop + ((isMapActive) ?
+      (pinMain.offsetHeight + PIN_MAIN_POINTER) : (pinMain.offsetHeight / 2)));
     adFormAddress.value = positionX + ', ' + positionY;
   };
 
@@ -25,12 +26,11 @@
     adFormAddress.setAttribute('readonly', 'readonly');
   };
 
-
   var pinMainCoordsLimit = {
-    left: window.data.locationXMin - pinMain.offsetWidth / 2,
-    top: window.data.locationYMin - pinMain.offsetHeight - PIN_MAIN_POINTER,
+    left: window.data.LocationPin.X_MIN - pinMain.offsetWidth / 2,
+    top: window.data.LocationPin.Y_MIN - pinMain.offsetHeight - PIN_MAIN_POINTER,
     right: window.data.locationXMax - pinMain.offsetWidth / 2,
-    bottom: window.data.locationYMax - pinMain.offsetHeight - PIN_MAIN_POINTER
+    bottom: window.data.LocationPin.Y_MAX - pinMain.offsetHeight - PIN_MAIN_POINTER
   };
 
   var checkPinMainCoords = function () {
@@ -53,8 +53,9 @@
    * @param {*} evt - объект события
    */
   var pinMainKeyDownHandler = function (evt) {
-    if (evt.key === 'Enter') {
-      window.form.pageActive();
+    if (window.util.isEnterPressed) {
+      evt.preventDefault();
+      window.main.pageActive();
     }
     pinMain.removeEventListener('mousedown', pinMainMouseDownHandler);
     pinMain.removeEventListener('keydown', pinMainKeyDownHandler);
@@ -65,7 +66,8 @@
    * @param {*} evt - объект события
    */
   var pinMainMouseDownHandler = function (evt) {
-    if (evt.which === 1) {
+    if (window.util.isMouseDownLeft) {
+      evt.preventDefault();
       window.main.pageActive();
     }
     pinMain.removeEventListener('mousedown', pinMainMouseDownHandler);
@@ -103,13 +105,11 @@
         y: moveEvt.clientY
       };
 
-
       pinMain.style.top = (pinMain.offsetTop - shift.y) + 'px';
       pinMain.style.left = (pinMain.offsetLeft - shift.x) + 'px';
 
       checkPinMainCoords();
       setAddressCoords(true);
-
     };
 
     var pinMainMouseUpHandler = function () {

@@ -10,7 +10,6 @@
     PALACE: 10000
   };
 
-  var map = document.querySelector('.map');
   var adForm = document.querySelector('.ad-form');
   var adFormSubmitButton = adForm.querySelector('.ad-form__submit');
   var adFormFieldsets = adForm.querySelectorAll('input, select, fieldset');
@@ -22,22 +21,8 @@
   var adFormPrice = adForm.querySelector('input[name="price"]');
   var adFormTimeIn = adForm.querySelector('select[name="timein"]');
   var adFormTimeOut = adForm.querySelector('select[name="timeout"]');
-  var mapFilters = document.querySelector('.map__filters');
-  var mapFiltersContainer = map.querySelector('.map__filters-container');
-  var mapFiltersFieldsets = mapFilters.querySelectorAll('input, select, fieldset');
 
   adForm.action = FORM_ACTION;
-
-  /** Изменение состояния fieldset
-   * @param {array} fieldsets - массив fieldset-ов
-   * @param {boolean} isEnabled - состояние элемента массива
-   * @param {*} fieldset - элемент массива
-   */
-  var changeFieldsets = function (fieldsets) {
-    fieldsets.forEach(function (fieldset) {
-      fieldset.disabled = true;
-    });
-  };
 
   /**
    * Валидация поля комнат и гостей
@@ -140,7 +125,8 @@
     * @param {*} evt - объект события
     */
     var successEscKeyDownHandler = function (evt) {
-      if (evt.key === 'Escape') {
+      if (window.util.isEscPressed) {
+        evt.preventDefault();
         successMessage.remove();
         document.removeEventListener('keydown', successEscKeyDownHandler);
         document.removeEventListener('click', successWindowClickHandler);
@@ -188,40 +174,43 @@
    * Активное состояние страницы
    */
   var formActive = function () {
-    mapFiltersContainer.classList.remove('hidden');
-    changeFieldsets(adFormFieldsets);
+    adForm.classList.remove('ad-form--disabled');
     window.coords.setAddress(true);
+    window.coords.disabledAddress();
+
     adFormRooms.addEventListener('input', checkRoomsHandler);
     adFormCapacity.addEventListener('input', checkRoomsHandler);
     adFormTimeIn.addEventListener('input', checkTimeInHandler);
     adFormTimeOut.addEventListener('input', checkTimeOutHandler);
     adFormTitle.addEventListener('input', checkTitlesHandler);
     adFormType.addEventListener('change', minPriceHandler);
+
     enabledFields(adFormFieldsets);
-    enabledFields(mapFiltersFieldsets);
-    window.coords.disabledAddress();
+
     adFormSubmitButton.addEventListener('click', submitButtonClickHandler);
+
+    window.photo.avatarChooser.addEventListener('change', window.photo.avatarChooseHandler);
+    window.photo.photoChooser.addEventListener('change', window.photo.photoChooseHandler);
   };
 
   /**
    * Неактивное состояние страницы
    */
   var formInactive = function () {
-    map.classList.add('map--faded');
     adForm.classList.add('ad-form--disabled');
+
     window.coords.setAddress(false);
     window.coords.setAddress(false);
+
     disabledFields(adFormFieldsets);
-    disabledFields(mapFiltersFieldsets);
-    mapFiltersContainer.classList.add('hidden');
+
     adFormSubmitButton.removeEventListener('click', submitButtonClickHandler);
   };
-
-  formInactive();
 
   window.form = {
     active: formActive,
     inactive: formInactive,
-    changeFieldsets: changeFieldsets
+    disabledFields: disabledFields,
+    enabledFields: enabledFields
   };
 })();

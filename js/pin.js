@@ -9,22 +9,23 @@
  * @return {object} - созданный DOM-элемент
  */
   var createNodePin = function (ad) {
-    var pinElement = mapPinTemplate.cloneNode(true);
-    var pinAvatar = pinElement.querySelector('img');
+    var pin = mapPinTemplate.cloneNode(true);
+    var pinAvatar = pin.querySelector('img');
 
     pinAvatar.src = ad.author.avatar;
     pinAvatar.alt = ad.offer.title;
 
-    pinElement.style.left = ad.location.x - window.data.Pin.WIDTH / 2 + 'px';
-    pinElement.style.top = ad.location.y + window.data.Pin.HEIGHT + 'px';
+    pin.style.left = ad.location.x - window.data.Pin.WIDTH / 2 + 'px';
+    pin.style.top = ad.location.y - window.data.Pin.HEIGHT + 'px';
 
-    pinElement.addEventListener('click', function () {
-      pinElement.classList.add('map__pin--active');
+    pin.addEventListener('click', function () {
+      window.map.closeCard();
+      pin.classList.add('map__pin--active');
       map.appendChild(window.card.create(ad));
       document.addEventListener('keydown', window.map.cardKeydownEscCloseHandler);
     });
 
-    return pinElement;
+    return pin;
   };
 
   window.pin = {

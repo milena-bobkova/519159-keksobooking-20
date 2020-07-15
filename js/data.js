@@ -8,40 +8,53 @@
     HEIGHT: 70
   };
 
+  var LocationPin = {
+    X_MIN: 0,
+    Y_MIN: 130,
+    Y_MAX: 630
+  };
+
+  var PinMainStartCoords = {
+    TOP: '375px',
+    LEFT: '570px'
+  };
+
+  var PhotoPreviewElement = {
+    ALT: 'Изображение жилья',
+    WIDTH: '70px',
+    HEIGHT: '70px'
+  };
+
+
   var roomTypes = {
     palace: 'Дворец',
     flat: 'Квартира',
     house: 'Дом',
     bungalo: 'Бунгало'
   };
-  /*
-   var Avatar = {
-     NAME: 'img/avatars/user0',
-     EXTENSION: '.png'
-   };
-   */
 
-  var locationPin = {
-    X_MIN: 0,
-    Y_MIN: 130,
-    Y_MAX: 630
+  var roomsNoun = {
+    one: ' комната для ',
+    some: ' комнаты для ',
+    many: ' комнат для '
   };
 
-  var pinMainStartCoords = {
-    TOP: '375px',
-    LEFT: '570px'
+  var guestsNoun = {
+    one: ' гостя',
+    many: ' гостей'
   };
 
   var locationXMax = document.querySelector('.map').offsetWidth;
 
   window.data = {
+    PinMainStartCoords: PinMainStartCoords,
+    PhotoPreviewElement: PhotoPreviewElement,
+    Pin: Pin,
+    LocationPin: LocationPin,
     roomTypes: roomTypes,
     locationXMax: locationXMax,
-    locationXMin: locationPin.X_MIN,
-    locationYMax: locationPin.Y_MAX,
-    locationYMin: locationPin.Y_MIN,
     menuHeight: FILTERS_HEIGHT,
-    pinMainStartCoords: pinMainStartCoords,
-    Pin: Pin
+    roomsNoun: roomsNoun,
+    guestsNoun: guestsNoun
   };
 })();
