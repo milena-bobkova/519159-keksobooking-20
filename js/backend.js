@@ -17,8 +17,8 @@
 
   /**
    * Функция инициализации xhr
-   * @param {function} onSuccess - коллбэк, срабатывающий при успешном выполнении запроса
-   * @param {Function} onError - коллбэк, срабатывающий при неуспешном выполнении запроса
+   * @param {function} onSuccessEvent - коллбэк, срабатывающий при успешном выполнении запроса
+   * @param {Function} onErrorEvent - коллбэк, срабатывающий при неуспешном выполнении запроса
    * @param {string} request - тип запроса
    * @param {string} url - адрес
    * @param {*} data - данные
