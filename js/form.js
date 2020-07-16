@@ -125,7 +125,7 @@
     * @param {*} evt - объект события
     */
     var successEscKeyDownHandler = function (evt) {
-      if (window.util.isEscPressed) {
+      if (window.util.isEscPressed(evt)) {
         evt.preventDefault();
         successMessage.remove();
         document.removeEventListener('keydown', successEscKeyDownHandler);
@@ -154,6 +154,7 @@
     evt.preventDefault();
     window.backend.saveData(new FormData(adForm), successSaveHandler, window.backend.errorHandler);
     window.main.pageInactive();
+    window.photo.clearPictureInput();
   };
 
   adForm.addEventListener('submit', adFormSubmitHandler);
@@ -166,6 +167,7 @@
   var resetButtonClickHandler = function (evt) {
     evt.preventDefault();
     window.main.pageInactive();
+    window.photo.clearPictureInput();
   };
 
   adFormResetButton.addEventListener('click', resetButtonClickHandler);

@@ -23,24 +23,24 @@
    * @param {string} url - адрес
    * @param {*} data - данные
    */
-  var load = function (onSuccess, onError, request, url, data) {
+  var load = function (onSuccessEvent, onErrorEvent, request, url, data) {
     var xhr = new XMLHttpRequest();
     xhr.responseType = 'json';
 
     xhr.addEventListener('load', function () {
       if (xhr.status === StatusCode.OK) {
-        onSuccess(xhr.response);
+        onSuccessEvent(xhr.response);
       } else {
-        onError('Cтатус ответа: ' + xhr.status + ' ' + xhr.statusText);
+        onErrorEvent('Cтатус ответа: ' + xhr.status + ' ' + xhr.statusText);
       }
     });
 
     xhr.addEventListener('error', function () {
-      onError('Произошла ошибка соединения');
+      onErrorEvent('Произошла ошибка соединения');
     });
 
     xhr.addEventListener('timeout', function () {
-      onError('Запрос не успел выполниться за ' + xhr.timeout + 'мс');
+      onErrorEvent('Запрос не успел выполниться за ' + xhr.timeout + 'мс');
     });
 
     xhr.timeout = TIMEOUT;
@@ -78,7 +78,7 @@
    * @param {*} evt - объект события
    */
   var errorEscKeyDownHandler = function (evt) {
-    if (window.util.isEscPressed) {
+    if (window.util.isEscPressed(evt)) {
       evt.preventDefault();
       document.querySelector('div.error').remove();
     }
@@ -98,7 +98,7 @@
     load(onSuccessEvent, onErrorEvent, REQUEST_GET, URL_GET);
   };
 
-  var saveData = function (onSuccessEvent, onErrorEvent, data) {
+  var saveData = function (data, onSuccessEvent, onErrorEvent) {
     load(onSuccessEvent, onErrorEvent, REQUEST_POST, URL_POST, data);
   };
 

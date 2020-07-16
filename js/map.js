@@ -68,7 +68,7 @@
    * @param {*} evt - объект события
    */
   var cardMouseDownCloseHandler = function (evt) {
-    if (window.util.isMouseDownLeft) {
+    if (window.util.isMouseDownLeft(evt)) {
       evt.preventDefault();
       closeCard();
     }
@@ -79,7 +79,7 @@
    * @param {*} evt - объект события
    */
   var cardKeydownEscCloseHandler = function (evt) {
-    if (window.util.isEscPressed) {
+    if (window.util.isEscPressed(evt)) {
       evt.preventDefault();
       closeCard();
     }

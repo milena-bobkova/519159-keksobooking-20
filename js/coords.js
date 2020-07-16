@@ -53,7 +53,7 @@
    * @param {*} evt - объект события
    */
   var pinMainKeyDownHandler = function (evt) {
-    if (window.util.isEnterPressed) {
+    if (window.util.isEnterPressed(evt)) {
       evt.preventDefault();
       window.main.pageActive();
     }
@@ -66,7 +66,7 @@
    * @param {*} evt - объект события
    */
   var pinMainMouseDownHandler = function (evt) {
-    if (window.util.isMouseDownLeft) {
+    if (window.util.isMouseDownLeft(evt)) {
       evt.preventDefault();
       window.main.pageActive();
     }
